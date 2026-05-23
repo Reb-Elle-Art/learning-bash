@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bash Concepts Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --text: #e8e4dc;
+    --muted: #6b6760;
+    --accent: #c8b89a;
+    --accent-dim: #3a3228;
+    --green: #4a7c59;
+    --green-bright: #7dbf8e;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(74,124,89,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tag {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--green-bright);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tag::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green-bright);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .pill-nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .pill:hover { border-color: var(--accent-dim); color: var(--text); }
+  .pill.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+  .section { margin-bottom: 2.5rem; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    transition: all 0.15s;
+  }
+
+  .card:hover {
+    border-color: var(--accent-dim);
+    transform: translateY(-1px);
+  }
+
+  .card-cmd {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .concept-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+  }
+
+  .concept-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    border-left: 2px solid var(--accent-dim);
+  }
+
+  .concept-term {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .concept-def {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .hidden { display: none; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  a.back {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 11px;
+    transition: color 0.15s;
+  }
+
+  a.back:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="tag">bash reference</div>
+    <h1>Bash concepts<em>.</em></h1>
+    <p style="font-size:12px;color:var(--muted);margin-top:0.5rem;">Commands and terms covered in this learning session</p>
+  </header>
+
+  <div class="pill-nav">
+    <div class="pill active" onclick="filter('all', this)">All</div>
+    <div class="pill" onclick="filter('navigation', this)">Navigation</div>
+    <div class="pill" onclick="filter('files', this)">Files</div>
+    <div class="pill" onclick="filter('remote', this)">Remote &amp; SSH</div>
+    <div class="pill" onclick="filter('system', this)">System</div>
+    <div class="pill" onclick="filter('concepts', this)">Concepts</div>
+  </div>
+
+  <div class="section" data-cat="navigation">
+    <div class="section-header">
+      <span class="section-title">Navigation</span>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="card-cmd">pwd</div><div class="card-desc">Print working directory -- where am I?</div></div>
+      <div class="card"><div class="card-cmd">ls</div><div class="card-desc">List contents of current directory</div></div>
+      <div class="card"><div class="card-cmd">ls -a</div><div class="card-desc">List including hidden files (dotfiles)</div></div>
+      <div class="card"><div class="card-cmd">ls -lh</div><div class="card-desc">List with sizes in human readable format</div></div>
+      <div class="card"><div class="card-cmd">ls -lah</div><div class="card-desc">Full detail view including hidden files</div></div>
+      <div class="card"><div class="card-cmd">cd &lt;dir&gt;</div><div class="card-desc">Change directory -- move into a folder</div></div>
+      <div class="card"><div class="card-cmd">cd ..</div><div class="card-desc">Go up one level to parent directory</div></div>
+    </div>
+  </div>
+
+  <div class="section" data-cat="files">
+    <div class="section-header">
+      <span class="section-title">Files &amp; directories</span>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="card-cmd">cat &lt;file&gt;</div><div class="card-desc">Print file contents -- good for short files</div></div>
+      <div class="card"><div class="card-cmd">less &lt;file&gt;</div><div class="card-desc">Scrollable viewer. q to quit</div></div>
+      <div class="card"><div class="card-cmd">head &lt;file&gt;</div><div class="card-desc">Show first 10 lines</div></div>
+      <div class="card"><div class="card-cmd">tail &lt;file&gt;</div><div class="card-desc">Show last 10 lines</div></div>
+      <div class="card"><div class="card-cmd">wc -lw &lt;file&gt;</div><div class="card-desc">Count lines and words in a file</div></div>
+      <div class="card"><div class="card-cmd">file &lt;file&gt;</div><div class="card-desc">Show what type of file something is</div></div>
+      <div class="card"><div class="card-cmd">find ~ -name</div><div class="card-desc">Search for a file by name</div></div>
+      <div class="card"><div class="card-cmd">find . -exec</div><div class="card-desc">Find files and run a command on each</div></div>
+      <div class="card"><div class="card-cmd">grep</div><div class="card-desc">Search for text inside files</div></div>
+      <div class="card"><div class="card-cmd">mv &lt;src&gt; &lt;dst&gt;</div><div class="card-desc">Move or rename a file or directory</div></div>
+      <div class="card"><div class="card-cmd">cp &lt;src&gt; &lt;dst&gt;</div><div class="card-desc">Copy a file. Use -r for directories</div></div>
+      <div class="card"><div class="card-cmd">rm -r &lt;dir&gt;</div><div class="card-desc">Delete a directory and its contents</div></div>
+      <div class="card"><div class="card-cmd">mkdir &lt;name&gt;</div><div class="card-desc">Create a new directory</div></div>
+      <div class="card"><div class="card-cmd">du -sh &lt;dir&gt;</div><div class="card-desc">Show size of a directory in MB/GB</div></div>
+      <div class="card"><div class="card-cmd">pandoc</div><div class="card-desc">Convert between file formats (e.g. rtf to md)</div></div>
+    </div>
+  </div>
+
+  <div class="section" data-cat="remote">
+    <div class="section-header">
+      <span class="section-title">Remote &amp; SSH</span>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="card-cmd">ssh user@host</div><div class="card-desc">Connect to a remote machine</div></div>
+      <div class="card"><div class="card-cmd">exit</div><div class="card-desc">Disconnect from SSH session</div></div>
+      <div class="card"><div class="card-cmd">tailscale status</div><div class="card-desc">List devices in your Tailscale network</div></div>
+      <div class="card"><div class="card-cmd">scp &lt;src&gt; &lt;dst&gt;</div><div class="card-desc">Securely copy files between machines</div></div>
+      <div class="card"><div class="card-cmd">scp -r</div><div class="card-desc">Securely copy entire directories</div></div>
+      <div class="card"><div class="card-cmd">scp host:path/*</div><div class="card-desc">Copy contents of a remote directory</div></div>
+    </div>
+  </div>
+
+  <div class="section" data-cat="system">
+    <div class="section-header">
+      <span class="section-title">System &amp; admin</span>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="card-cmd">hostname</div><div class="card-desc">Show which machine you are on</div></div>
+      <div class="card"><div class="card-cmd">echo $SHELL</div><div class="card-desc">Show which shell you are using</div></div>
+      <div class="card"><div class="card-cmd">which &lt;program&gt;</div><div class="card-desc">Show where a program is installed</div></div>
+      <div class="card"><div class="card-cmd">sudo &lt;cmd&gt;</div><div class="card-desc">Run a command as administrator</div></div>
+      <div class="card"><div class="card-cmd">sudo passwd root</div><div class="card-desc">Change the root password</div></div>
+      <div class="card"><div class="card-cmd">lsb_release -a</div><div class="card-desc">Show Ubuntu version info</div></div>
+      <div class="card"><div class="card-cmd">brew install</div><div class="card-desc">Install software on Mac via Homebrew</div></div>
+      <div class="card"><div class="card-cmd">apt install</div><div class="card-desc">Install software on Ubuntu</div></div>
+      <div class="card"><div class="card-cmd">apt update &amp;&amp; upgrade</div><div class="card-desc">Update and upgrade packages on Ubuntu</div></div>
+      <div class="card"><div class="card-cmd">systemctl status</div><div class="card-desc">Check the status of a background service</div></div>
+      <div class="card"><div class="card-cmd">sudo reboot</div><div class="card-desc">Restart the machine</div></div>
+    </div>
+  </div>
+
+  <div class="section" data-cat="concepts">
+    <div class="section-header">
+      <span class="section-title">Key concepts</span>
+    </div>
+    <div class="concept-cards">
+      <div class="concept-card"><div class="concept-term">CLI</div><div class="concept-def">Command Line Interface -- text-based way to interact with a computer</div></div>
+      <div class="concept-card"><div class="concept-term">Shell</div><div class="concept-def">The program that reads and runs your commands (bash, zsh)</div></div>
+      <div class="concept-card"><div class="concept-term">Flag / option</div><div class="concept-def">Modifies a command's behavior. Starts with - (e.g. ls -a)</div></div>
+      <div class="concept-card"><div class="concept-term">Wildcard *</div><div class="concept-def">Means "anything" -- e.g. *.md matches all markdown files</div></div>
+      <div class="concept-card"><div class="concept-term">Pipe |</div><div class="concept-def">Sends output of one command as input to another</div></div>
+      <div class="concept-card"><div class="concept-term">; separator</div><div class="concept-def">Run this command then the next, no matter what</div></div>
+      <div class="concept-card"><div class="concept-term">&amp;&amp; separator</div><div class="concept-def">Run the next command only if the first succeeded</div></div>
+      <div class="concept-card"><div class="concept-term">$() substitution</div><div class="concept-def">Use the output of a command as a value, e.g. $(find . -name "*.txt")</div></div>
+      <div class="concept-card"><div class="concept-term">sudo</div><div class="concept-def">Superuser do -- temporarily run a command as admin</div></div>
+      <div class="concept-card"><div class="concept-term">. and ..</div><div class="concept-def">. = current directory, .. = parent directory</div></div>
+      <div class="concept-card"><div class="concept-term">~ (tilde)</div><div class="concept-def">Shortcut for your home directory</div></div>
+      <div class="concept-card"><div class="concept-term">Absolute vs relative path</div><div class="concept-def">Absolute starts with / (from root). Relative starts from where you are</div></div>
+      <div class="concept-card"><div class="concept-term">Hidden files</div><div class="concept-def">Files starting with . are hidden by default (e.g. .openclaw)</div></div>
+      <div class="concept-card"><div class="concept-term">Git / .git</div><div class="concept-def">Version control system. .git folder stores change history</div></div>
+      <div class="concept-card"><div class="concept-term">Bash scripting</div><div class="concept-def">Chaining commands with logic like loops (for f in *.rtf...)</div></div>
+      <div class="concept-card"><div class="concept-term">LTS</div><div class="concept-def">Long Term Support -- stable, long-supported software version</div></div>
+      <div class="concept-card"><div class="concept-term">Markdown</div><div class="concept-def">Simple text formatting language, files end in .md</div></div>
+      <div class="concept-card"><div class="concept-term">Package manager</div><div class="concept-def">Tool for installing software. brew on Mac, apt on Ubuntu</div></div>
+      <div class="concept-card"><div class="concept-term">nginx</div><div class="concept-def">A web server -- serves files to a browser over a network</div></div>
+      <div class="concept-card"><div class="concept-term">systemctl</div><div class="concept-def">Manages background services on Ubuntu (start, stop, status)</div></div>
+      <div class="concept-card"><div class="concept-term">Prompt symbols</div><div class="concept-def">$ = regular user (bash), % = regular user (zsh), # = root/admin</div></div>
+      <div class="concept-card"><div class="concept-term">.bak convention</div><div class="concept-def">Renaming a file with .bak marks it as a backup -- still there but ignored</div></div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="index.html" class="back">&#8592; back to Enid &amp; Anazial</a>
+    <span>updated May 2026</span>
+  </footer>
+</div>
+
+<script>
+function filter(cat, el) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.section').forEach(s => {
+    if (cat === 'all' || s.dataset.cat === cat) {
+      s.classList.remove('hidden');
+    } else {
+      s.classList.add('hidden');
+    }
+  });
+}
+</script>
+</body>
+</html>
