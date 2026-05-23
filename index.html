@@ -3,1175 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bash Skills</title>
+<title>learning .log</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg: #0e0e0e;
   --surface: #161616;
-  --surface2: #1e1e1e;
   --border: #2a2a2a;
   --text: #e8e4dc;
   --muted: #6b6760;
   --accent: #c8b89a;
   --accent-dim: #3a3228;
-  --green: #4a7c59;
   --green-bright: #7dbf8e;
-  --blue: #6b9ab8;
-  --blue-dim: #1a2e3a;
-  --purple: #9b8ab8;
-  --purple-dim: #2a1e3a;
-  --coral: #b87a6b;
-  --coral-dim: #3a1e1a;
 }
 body {
   background: var(--bg);
   color: var(--text);
   font-family: 'DM Mono', monospace;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
 }
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at 20% 50%, rgba(74,124,89,0.05) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 20% 50%, rgba(74,124,89,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(200,184,154,0.04) 0%, transparent 50%);
   pointer-events: none;
-  z-index: 0;
 }
-.container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; animation: fadeUp 0.6s ease both; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-
-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
-.tag { font-size: 11px; letter-spacing: 0.15em; color: var(--green-bright); text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
-.tag::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green-bright); animation: pulse 2s ease infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-h1 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; font-weight: 400; color: var(--text); letter-spacing: -0.02em; }
-h1 em { font-style: italic; color: var(--accent); }
-
-.tab-nav { display: flex; gap: 2px; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
-.tab { padding: 8px 18px; font-size: 12px; font-family: 'DM Mono', monospace; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; background: none; border-top: none; border-left: none; border-right: none; }
-.tab:hover { color: var(--text); }
-.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-.pill-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-.pill { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-family: 'DM Mono', monospace; color: var(--muted); cursor: pointer; transition: all 0.15s; }
-.pill:hover { border-color: var(--accent-dim); color: var(--text); }
-.pill.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
-
-.section { margin-bottom: 2.5rem; }
-.section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-.section-title { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.2em; }
-
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s;
-  overflow: hidden;
+.container {
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.8s ease both;
 }
-.card:hover { border-color: var(--accent-dim); }
-.card.open { border-color: var(--accent); }
-.card-top { padding: 10px 12px; }
-.card-cmd { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--accent); margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-.card-cmd .chevron { font-size: 10px; color: var(--muted); transition: transform 0.2s; }
-.card.open .chevron { transform: rotate(180deg); }
-.card-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
-.card-detail {
-  display: none;
-  padding: 10px 12px;
-  border-top: 1px solid var(--border);
-  background: var(--surface2);
-  animation: slideDown 0.2s ease;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-@keyframes slideDown { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
-.card.open .card-detail { display: block; }
-.detail-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 4px; margin-top: 10px; }
-.detail-label:first-child { margin-top: 0; }
-.detail-example {
-  font-family: 'DM Mono', monospace;
+.tag {
   font-size: 11px;
+  letter-spacing: 0.15em;
   color: var(--green-bright);
-  background: #0a0a0a;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 6px 8px;
-  line-height: 1.6;
-  white-space: pre;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.detail-text { font-size: 11px; color: var(--text); line-height: 1.6; }
-.flag-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-.flag-pill {
+.tag::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green-bright);
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+h1 em { font-style: italic; color: var(--accent); }
+.subtitle {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 3rem;
+  letter-spacing: 0.04em;
+}
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.section-label {
   font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 20px;
-  border: 1px solid var(--accent-dim);
-  color: var(--accent);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.15s;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
 }
-.flag-pill:hover { background: var(--accent-dim); }
-
-.block-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; }
-.block-card {
+.links { display: flex; flex-direction: column; gap: 2px; }
+.link-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s ease;
+  position: relative;
   overflow: hidden;
-  cursor: pointer;
-  transition: all 0.15s;
 }
-.block-card:hover { border-color: var(--accent-dim); }
-.block-card.open { border-color: var(--accent); }
-.block-top { padding: 12px 14px; display: flex; justify-content: space-between; align-items: flex-start; }
-.block-symbol { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: var(--accent); margin-bottom: 4px; }
-.block-name { font-size: 11px; color: var(--muted); }
-.block-chevron { font-size: 10px; color: var(--muted); transition: transform 0.2s; margin-top: 4px; }
-.block-card.open .block-chevron { transform: rotate(180deg); }
-.block-detail { display: none; padding: 10px 14px; border-top: 1px solid var(--border); background: var(--surface2); }
-.block-card.open .block-detail { display: block; animation: slideDown 0.2s ease; }
-
-.concept-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
-.concept-card { background: var(--surface); border: 1px solid var(--border); border-left: 2px solid var(--accent-dim); border-radius: 6px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; overflow: hidden; }
-.concept-card:hover { border-left-color: var(--accent); }
-.concept-card.open { border-left-color: var(--accent); }
-.concept-top { display: flex; justify-content: space-between; }
-.concept-term { font-size: 13px; font-weight: 500; color: var(--accent); margin-bottom: 4px; }
-.concept-def { font-size: 11px; color: var(--muted); line-height: 1.5; }
-.concept-detail { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); animation: slideDown 0.2s ease; }
-.concept-card.open .concept-detail { display: block; }
-
-.flag-index { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
-.flag-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
-.flag-name { font-family: 'DM Mono', monospace; font-size: 15px; color: var(--blue); font-weight: 500; margin-bottom: 4px; }
-.flag-meaning { font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
-.flag-used { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 4px; }
-.flag-cmds { display: flex; flex-wrap: wrap; gap: 4px; }
-.flag-cmd-pill { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--blue-dim); color: var(--blue); border: 1px solid #1e3a4a; }
-
-.hidden { display: none; }
-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; }
+.link-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform 0.2s ease;
+}
+.link-item:hover { border-color: var(--accent-dim); background: #1a1a1a; transform: translateX(4px); }
+.link-item:hover::before { transform: scaleY(1); }
+.link-icon { font-size: 16px; color: var(--accent); flex-shrink: 0; width: 20px; text-align: center; font-family: 'DM Mono', monospace; }
+.link-content { flex: 1; }
+.link-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.link-desc { font-size: 11px; color: var(--muted); }
+.link-tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--accent-dim); color: var(--accent); border: 1px solid #4a3a28; flex-shrink: 0; }
+.link-arrow { color: var(--muted); font-size: 14px; transition: color 0.2s, transform 0.2s; }
+.link-item:hover .link-arrow { color: var(--accent); transform: translateX(3px); }
+.coming-soon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+  cursor: default;
+}
+.coming-soon-icon { font-size: 16px; width: 20px; text-align: center; opacity: 0.4; }
+footer {
+  margin-top: 3rem;
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+.blink { animation: blink 1.2s step-end infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 </style>
 </head>
 <body>
 <div class="container">
-  <header>
-    <div class="tag">bash reference</div>
-    <h1>Bash skills<em>.</em></h1>
-    <p style="font-size:12px;color:var(--muted);margin-top:0.5rem;">Commands, building blocks, and concepts -- built during learning sessions</p>
-  </header>
+  <div class="tag">active session</div>
 
-  <div class="tab-nav">
-    <button class="tab active" onclick="switchTab('commands', this)">Commands</button>
-    <button class="tab" onclick="switchTab('blocks', this)">Building blocks</button>
-    <button class="tab" onclick="switchTab('flags', this)">Flags</button>
-    <button class="tab" onclick="switchTab('concepts', this)">Concepts</button>
-  </div>
+  <h1>learning <em>.log</em></h1>
+  <p class="subtitle">a personal knowledge base &nbsp;&#183;&nbsp; built in the terminal</p>
 
-  <!-- COMMANDS TAB -->
-  <div class="tab-panel active" id="tab-commands">
-    <div class="pill-nav">
-      <div class="pill active" onclick="filterCmd('all', this)">All</div>
-      <div class="pill" onclick="filterCmd('navigation', this)">Navigation</div>
-      <div class="pill" onclick="filterCmd('files', this)">Files</div>
-      <div class="pill" onclick="filterCmd('remote', this)">Remote &amp; SSH</div>
-      <div class="pill" onclick="filterCmd('system', this)">System</div>
-    </div>
+  <hr class="divider">
 
-    <div class="section" data-cat="navigation">
-      <div class="section-header"><span class="section-title">Navigation</span></div>
-      <div class="cards">
+  <p class="section-label">Reference</p>
 
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">pwd <span class="chevron">v</span></div>
-            <div class="card-desc">Print working directory</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Shows your exact location in the filesystem as a full path.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ pwd
-/home/anazial/.openclaw/workspace</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">Use it whenever you feel lost. Think of it as "You Are Here" on a map.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">ls <span class="chevron">v</span></div>
-            <div class="card-desc">List directory contents</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Shows all files and folders in your current directory.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ ls
-AGENTS.md  BOOTSTRAP.md  README.md</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills">
-              <span class="flag-pill">-a</span>
-              <span class="flag-pill">-l</span>
-              <span class="flag-pill">-h</span>
-              <span class="flag-pill">-lah</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">cd <span class="chevron">v</span></div>
-            <div class="card-desc">Change directory</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Moves you into a different folder.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ cd documents
-$ cd ..
-$ cd ~/.openclaw/workspace
-$ cd /var/www/html</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">cd .. goes up one level. cd ~ takes you home from anywhere.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">hostname <span class="chevron">v</span></div>
-            <div class="card-desc">Show current machine name</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Prints the name of the machine your shell is running on.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ hostname
-enid</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">Use it as a sanity check when jumping between your Mac and Enid via SSH.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">whoami <span class="chevron">v</span></div>
-            <div class="card-desc">Show current user</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Prints the username you are currently logged in as.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ whoami
-anazial</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">Useful after sudo su to confirm whether you are root or your regular user.</div>
-          </div>
-        </div>
-
+  <div class="links">
+    <a href="bash-skills.html" class="link-item">
+      <span class="link-icon">$_</span>
+      <div class="link-content">
+        <div class="link-title">bash skills</div>
+        <div class="link-desc">Commands, building blocks, flags, and concepts</div>
       </div>
-    </div>
-
-    <div class="section" data-cat="files">
-      <div class="section-header"><span class="section-title">Files &amp; directories</span></div>
-      <div class="cards">
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">cat <span class="chevron">v</span></div>
-            <div class="card-desc">Print file contents</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Dumps the entire file to the terminal at once. Best for short files.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ cat AGENTS.md</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">If your screen floods with text, switch to less instead.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">less <span class="chevron">v</span></div>
-            <div class="card-desc">Scrollable file viewer</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Opens a file in a scrollable viewer. Better than cat for long files.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ less BOOTSTRAP.md</div>
-            <div class="detail-label">Controls</div>
-            <div class="detail-text">Arrow keys or spacebar to scroll. q to quit.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">head <span class="chevron">v</span></div>
-            <div class="card-desc">Show first 10 lines</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Prints just the top of a file. Good for peeking.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ head AGENTS.md
-$ head -20 AGENTS.md</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-n</span></div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">tail <span class="chevron">v</span></div>
-            <div class="card-desc">Show last 10 lines</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Prints the bottom of a file. Especially useful for log files.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ tail error.log
-$ tail -20 error.log</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-n</span></div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">wc <span class="chevron">v</span></div>
-            <div class="card-desc">Word/line count</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Counts lines, words, or characters in a file.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ wc -lw AGENTS.md
-42 310 AGENTS.md</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-l</span><span class="flag-pill">-w</span></div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">file <span class="chevron">v</span></div>
-            <div class="card-desc">Identify file type</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Tells you what kind of file something is -- useful when the extension is missing or unclear.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ file image.png
-image.png: PNG image data, 1920 x 1080</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">find <span class="chevron">v</span></div>
-            <div class="card-desc">Search for files</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Searches for files by name, type, or other attributes. Searches recursively through subdirectories.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ find ~ -name "AGENTS.md"
-$ find . -name "*.md"
-$ find / -name "nginx.conf"</div>
-            <div class="detail-label">With -exec</div>
-            <div class="detail-text">Run a command on every result. {} is the placeholder for each file found.</div>
-            <div class="detail-example">$ find . -name "*.rtf" -exec pandoc {} -o {}.md \;</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-name</span><span class="flag-pill">-exec</span><span class="flag-pill">-type</span></div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">grep <span class="chevron">v</span></div>
-            <div class="card-desc">Search inside files</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Searches for text inside files. find looks for files, grep looks inside them.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ grep "session" AGENTS.md
-$ grep -r "session" ~/documents</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-r</span><span class="flag-pill">-i</span><span class="flag-pill">-n</span></div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">mv <span class="chevron">v</span></div>
-            <div class="card-desc">Move or rename</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Moves a file or directory to a new location. Also used to rename things.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ mv file.md ~/documents/
-$ mv oldname.md newname.md
-$ mv folder/ ~/documents/
-$ mv file.md .</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">Does not need -r for directories. The original is gone after moving.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">cp <span class="chevron">v</span></div>
-            <div class="card-desc">Copy files</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Copies a file or directory. Original stays in place.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ cp file.md ~/documents/
-$ cp -r myfolder/ ~/documents/
-$ cp *.md ~/documents/</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-r</span></div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">rm <span class="chevron">v</span></div>
-            <div class="card-desc">Delete files</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Permanently deletes files or directories. No trash, no undo.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ rm file.md
-$ rm -r myfolder/
-$ rm -ri folder1/ folder2/</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-r</span><span class="flag-pill">-f</span><span class="flag-pill">-i</span></div>
-            <div class="detail-label">Warning</div>
-            <div class="detail-text">-rf deletes everything forcefully with zero confirmation. Double check before running.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">mkdir <span class="chevron">v</span></div>
-            <div class="card-desc">Create directory</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Creates a new empty directory.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ mkdir newfolder
-$ mkdir ~/documents/projects</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">du <span class="chevron">v</span></div>
-            <div class="card-desc">Disk usage</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Shows how much disk space a directory is using.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ du -sh myfolder/
-$ du -sh *
-$ du -sh .</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-s</span><span class="flag-pill">-h</span></div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">pandoc <span class="chevron">v</span></div>
-            <div class="card-desc">Convert file formats</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Converts between document formats. Figures out the conversion from file extensions.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ pandoc file.rtf -o file.md
-$ pandoc file.md -o file.docx</div>
-            <div class="detail-label">Batch convert with loop</div>
-            <div class="detail-example">$ for f in *.rtf; do
-    pandoc "$f" -o "${f%.rtf}.md"
-  done</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-o</span></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="section" data-cat="remote">
-      <div class="section-header"><span class="section-title">Remote &amp; SSH</span></div>
-      <div class="cards">
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">ssh <span class="chevron">v</span></div>
-            <div class="card-desc">Connect to remote machine</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Opens a secure shell session on a remote machine. Everything you type runs there, not locally.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ ssh anazial@100.x.x.x
-$ ssh anazial@enid</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">With Tailscale you can use the machine hostname instead of the IP address.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">exit <span class="chevron">v</span></div>
-            <div class="card-desc">Leave SSH / switch user</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Ends the current shell session. Drops you back to your local terminal after SSH, or back to your regular user after sudo su.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ exit</div>
-            <div class="detail-label">Force disconnect</div>
-            <div class="detail-text">If the terminal is frozen, type ~. (tilde then period) to force close SSH.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">scp <span class="chevron">v</span></div>
-            <div class="card-desc">Secure copy between machines</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Copies files between your local machine and a remote one over SSH. Run from your local machine.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ scp file.md user@enid:~/
-$ scp user@enid:~/file.md ~/Desktop/
-$ scp -r folder/ user@enid:~/
-$ scp user@enid:~/folder/* ~/Desktop/</div>
-            <div class="detail-label">Pattern</div>
-            <div class="detail-text">Remote paths use user@host:/path format. The colon separates machine from path.</div>
-            <div class="detail-label">Common flags</div>
-            <div class="flag-pills"><span class="flag-pill">-r</span></div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">tailscale status <span class="chevron">v</span></div>
-            <div class="card-desc">List Tailscale devices</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Shows all devices on your private Tailscale network with their IPs and hostnames.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ tailscale status</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="section" data-cat="system">
-      <div class="section-header"><span class="section-title">System &amp; admin</span></div>
-      <div class="cards">
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">sudo <span class="chevron">v</span></div>
-            <div class="card-desc">Run as administrator</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Superuser do. Temporarily runs one command with full admin privileges.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ sudo apt install nginx
-$ sudo mv file.html /var/www/html/
-$ sudo reboot</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">sudo su switches you fully into the root user. Use exit to get back out.</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">systemctl <span class="chevron">v</span></div>
-            <div class="card-desc">Manage background services</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Starts, stops, restarts, and checks the status of system services on Ubuntu.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ sudo systemctl status nginx
-$ sudo systemctl start nginx
-$ sudo systemctl stop nginx
-$ sudo systemctl restart nginx</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">apt <span class="chevron">v</span></div>
-            <div class="card-desc">Install software (Ubuntu)</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Ubuntu's package manager. Installs, updates, and removes software.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ sudo apt install nginx
-$ sudo apt install pandoc
-$ sudo apt update
-$ sudo apt update &amp;&amp; sudo apt upgrade nginx</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">brew <span class="chevron">v</span></div>
-            <div class="card-desc">Install software (Mac)</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Homebrew -- Mac's package manager. Equivalent of apt on Ubuntu.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ brew install helix
-$ brew install pandoc
-$ brew install nginx
-$ brew services start nginx</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">echo $SHELL <span class="chevron">v</span></div>
-            <div class="card-desc">Show current shell</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Prints which shell you are using. echo prints a value, $SHELL is an environment variable holding the shell path.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ echo $SHELL
-/bin/zsh       (Mac)
-/bin/bash      (Ubuntu)</div>
-          </div>
-        </div>
-
-        <div class="card" onclick="toggleCard(this)">
-          <div class="card-top">
-            <div class="card-cmd">sudo reboot <span class="chevron">v</span></div>
-            <div class="card-desc">Restart the machine</div>
-          </div>
-          <div class="card-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Restarts the machine. If you are SSH'd in, your connection will drop immediately -- that is normal.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ sudo reboot</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">Wait 30 seconds then SSH back in as normal.</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- BUILDING BLOCKS TAB -->
-  <div class="tab-panel" id="tab-blocks">
-    <p style="font-size:12px;color:var(--muted);margin-bottom:1.5rem;">Reusable syntax elements that work across many commands. Click to expand.</p>
-
-    <div class="section">
-      <div class="section-header"><span class="section-title">Path symbols</span></div>
-      <div class="block-cards">
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">~</div><div class="block-name">Home directory</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it means</div>
-            <div class="detail-text">A shortcut for your home directory. Works anywhere a path is expected.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ cd ~
-$ ls ~/documents
-$ scp file.md user@enid:~/</div>
-          </div>
-        </div>
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">.</div><div class="block-name">Current directory</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it means</div>
-            <div class="detail-text">Refers to wherever you currently are. Useful as a destination.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ mv ~/downloads/file.md .
-$ cp ~/documents/* .
-$ du -sh .</div>
-          </div>
-        </div>
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">..</div><div class="block-name">Parent directory</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it means</div>
-            <div class="detail-text">One level up from where you are.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ cd ..
-$ cd ../../
-$ mv file.md ../</div>
-          </div>
-        </div>
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">/</div><div class="block-name">Root / path separator</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it means</div>
-            <div class="detail-text">At the start of a path, / means the absolute root of the filesystem. Between path parts, it separates directory names.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ cd /var/www/html
-$ ls /
-$ find / -name "nginx.conf"</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">Paths starting with / are absolute (always from root). Paths without / are relative (from where you are).</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-header"><span class="section-title">Wildcards &amp; patterns</span></div>
-      <div class="block-cards">
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">*</div><div class="block-name">Wildcard -- match anything</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it means</div>
-            <div class="detail-text">Matches any characters. Use it to target groups of files by pattern.</div>
-            <div class="detail-label">Examples</div>
-            <div class="detail-example">$ ls *.md
-$ cp *.txt ~/backup/
-$ scp user@enid:~/folder/* ~/Desktop/
-$ find . -name "*.rtf"</div>
-            <div class="detail-label">Contents vs directory</div>
-            <div class="detail-text">folder/ copies the folder itself. folder/* copies what is inside it.</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-header"><span class="section-title">Operators &amp; chaining</span></div>
-      <div class="block-cards">
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">;</div><div class="block-name">Run sequentially</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Runs commands one after the other, regardless of whether the first one succeeded.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ mkdir folder; cd folder</div>
-          </div>
-        </div>
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">&amp;&amp;</div><div class="block-name">Run if previous succeeded</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Only runs the second command if the first one succeeded. Safer than semicolon for dependent commands.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ sudo apt update &amp;&amp; sudo apt upgrade nginx</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">If apt update fails, the upgrade won't run. Good for safety.</div>
-          </div>
-        </div>
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">|</div><div class="block-name">Pipe -- chain commands</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Takes the output of one command and feeds it as input to the next.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ cat file.txt | grep "session"
-$ ls | wc -l</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">The second example counts how many files are in a directory.</div>
-          </div>
-        </div>
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">$()</div><div class="block-name">Command substitution</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Runs a command inside the parentheses and uses its output as a value in another command.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ for f in $(find . -name "*.txt"); do
-    pandoc "$f" -o "${f%.txt}.md"
-  done</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">The find command runs first, then its list of files is used by the for loop.</div>
-          </div>
-        </div>
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">&gt; and &gt;&gt;</div><div class="block-name">Redirect output to file</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Instead of printing to the terminal, sends output to a file.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ echo "hello" &gt; file.txt
-$ cat log.txt &gt;&gt; archive.txt</div>
-            <div class="detail-label">Difference</div>
-            <div class="detail-text">&gt; overwrites the file. &gt;&gt; appends to the end without overwriting.</div>
-          </div>
-        </div>
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">\</div><div class="block-name">Escape -- handle spaces</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Escapes the next character. Most commonly used to handle spaces in file or directory names.</div>
-            <div class="detail-label">Example</div>
-            <div class="detail-example">$ cd My\ Documents
-$ mv file.md 00\ Human/001\ To\ Be\ Sorted/</div>
-            <div class="detail-label">Tip</div>
-            <div class="detail-text">Alternatively, wrap the whole path in quotes: cd "My Documents"</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-header"><span class="section-title">Scripting</span></div>
-      <div class="block-cards">
-
-        <div class="block-card" onclick="toggleCard(this)">
-          <div class="block-top">
-            <div><div class="block-symbol">for loop</div><div class="block-name">Repeat for each item</div></div>
-            <div class="block-chevron">v</div>
-          </div>
-          <div class="block-detail">
-            <div class="detail-label">What it does</div>
-            <div class="detail-text">Repeats a command for each item in a list. The variable (f) takes the value of each item in turn.</div>
-            <div class="detail-label">Pattern</div>
-            <div class="detail-example">for f in *.rtf; do
-  pandoc "$f" -o "${f%.rtf}.md"
-done</div>
-            <div class="detail-label">Breaking it down</div>
-            <div class="detail-text">for f in *.rtf -- loop through every rtf file, calling it f each time. do...done -- wraps the commands to run on each. ${f%.rtf} -- strips the .rtf extension from the filename.</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
-  <!-- FLAGS TAB -->
-  <div class="tab-panel" id="tab-flags">
-    <p style="font-size:12px;color:var(--muted);margin-bottom:1.5rem;">Common flags and which commands use them.</p>
-    <div class="flag-index">
-
-      <div class="flag-card">
-        <div class="flag-name">-r</div>
-        <div class="flag-meaning">Recursive -- apply to directories and everything inside them</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">cp</span>
-          <span class="flag-cmd-pill">rm</span>
-          <span class="flag-cmd-pill">scp</span>
-          <span class="flag-cmd-pill">grep</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-a</div>
-        <div class="flag-meaning">All -- include hidden files (those starting with .)</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">ls</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-l</div>
-        <div class="flag-meaning">Long format -- show detailed info (permissions, size, date)</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">ls</span>
-          <span class="flag-cmd-pill">wc</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-h</div>
-        <div class="flag-meaning">Human readable -- show sizes in KB, MB, GB instead of raw bytes</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">ls</span>
-          <span class="flag-cmd-pill">du</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-f</div>
-        <div class="flag-meaning">Force -- skip confirmation prompts and override protections</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">rm</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-i</div>
-        <div class="flag-meaning">Interactive -- ask for confirmation before each action</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">rm</span>
-          <span class="flag-cmd-pill">grep</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-s</div>
-        <div class="flag-meaning">Summary -- show total only, not line-by-line breakdown</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">du</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-n</div>
-        <div class="flag-meaning">Number -- specify how many lines to show</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">head</span>
-          <span class="flag-cmd-pill">tail</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-w</div>
-        <div class="flag-meaning">Words -- count words instead of lines</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">wc</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-o</div>
-        <div class="flag-meaning">Output -- specify the output file or destination</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">pandoc</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-exec</div>
-        <div class="flag-meaning">Execute -- run a command on each result found. {} is the placeholder for the current file</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">find</span>
-        </div>
-      </div>
-
-      <div class="flag-card">
-        <div class="flag-name">-name</div>
-        <div class="flag-meaning">Match by filename -- supports wildcards like *.md</div>
-        <div class="flag-used">Used in</div>
-        <div class="flag-cmds">
-          <span class="flag-cmd-pill">find</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- CONCEPTS TAB -->
-  <div class="tab-panel" id="tab-concepts">
-    <p style="font-size:12px;color:var(--muted);margin-bottom:1.5rem;">The bigger ideas behind the commands. Click to expand.</p>
-    <div class="concept-cards">
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">CLI</div><div class="concept-def">Command Line Interface</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">A text-based way to interact with a computer. You type commands, the computer responds with text. The alternative is a GUI (Graphical User Interface) where you click around.</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Shell</div><div class="concept-def">bash vs zsh</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">The shell is the program that reads and runs your commands. bash is the default on Ubuntu, zsh is the default on modern macOS. They are almost identical for everyday use -- the differences only matter in advanced scripting.</div>
-          <div class="detail-example">Mac prompt:    %
-Ubuntu prompt: $
-Root prompt:   #</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Absolute vs relative paths</div><div class="concept-def">Where you start from matters</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">An absolute path starts from the root of the filesystem and always works from anywhere. A relative path starts from wherever you currently are.</div>
-          <div class="detail-example">Absolute: /var/www/html/index.html
-Relative: documents/index.html</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">sudo &amp; root</div><div class="concept-def">Admin privileges</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">Root is the all-powerful admin account on Linux. sudo lets your regular user borrow root power for a single command. sudo su switches you fully into root -- your prompt changes from $ to #. Always exit back out when done.</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Hidden files</div><div class="concept-def">Dotfiles</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">Any file or directory starting with . is hidden from ls by default. Configuration files are often hidden this way. Use ls -a to see them.</div>
-          <div class="detail-example">~/.openclaw
-~/.config
-~/.gitconfig</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Package managers</div><div class="concept-def">brew and apt</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">Package managers install, update, and remove software from a central repository. Think of them as app stores for the terminal. brew on Mac, apt on Ubuntu.</div>
-          <div class="detail-example">Mac:    brew install helix
-Ubuntu: sudo apt install helix</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Git &amp; .git</div><div class="concept-def">Version control</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">Git is a version control system -- a time machine for your files. It tracks every change so you can go back in time. The .git directory is a hidden folder Git creates inside any repository to store this history. It contains write-protected files which is why rm -r asks for confirmation.</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">nginx</div><div class="concept-def">Web server</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">nginx is a web server -- a program that listens for browser requests and serves files in response. It runs as a background service managed by systemctl. By default it serves files from /var/www/html/ and index.html loads automatically when you visit the root URL.</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">LTS</div><div class="concept-def">Long Term Support</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">LTS versions of software are supported with security updates for a longer period (5 years for Ubuntu). They are more stable and predictable than cutting-edge releases. Ubuntu 24.04 LTS (Noble Numbat) is what Enid runs.</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">.bak convention</div><div class="concept-def">Keeping backups</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">Adding .bak to a filename is a common convention meaning "backup". The file is still there if you need it but programs and servers won't pick it up automatically. Better than deleting something you might want later.</div>
-          <div class="detail-example">$ mv index.nginx-debian.html index.nginx-debian.html.bak</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Tailscale &amp; SSH</div><div class="concept-def">Private networking</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">SSH creates an encrypted tunnel to a remote machine. Tailscale creates a private network between your devices so you can SSH using hostnames instead of IPs, and services like nginx are only reachable by your tailnet devices -- not the public internet.</div>
-        </div>
-      </div>
-
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Markdown</div><div class="concept-def">.md files</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text">Markdown is a simple text formatting language. Files end in .md. # makes a heading, ** makes bold, - makes a bullet. It is human-readable as plain text and also renders nicely in many apps. Commonly used for documentation.</div>
-        </div>
-      </div>
-
+      <span class="link-tag">in progress</span>
+      <span class="link-arrow">&#8594;</span>
+    </a>
+
+    <div class="coming-soon">
+      <span class="coming-soon-icon">+</span>
+      <span>more coming as we learn...</span>
     </div>
   </div>
 
   <footer>
     <span>enid &amp; anazial</span>
-    <span>updated May 2026</span>
+    <span><span id="time"></span><span class="blink">_</span></span>
   </footer>
 </div>
-
 <script>
-function toggleCard(el) {
-  el.classList.toggle('open');
+function tick() {
+  const now = new Date();
+  document.getElementById('time').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
-
-function switchTab(name, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
-}
-
-function filterCmd(cat, el) {
-  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('#tab-commands .section').forEach(s => {
-    if (cat === 'all' || s.dataset.cat === cat) {
-      s.classList.remove('hidden');
-    } else {
-      s.classList.add('hidden');
-    }
-  });
-}
+tick();
+setInterval(tick, 1000);
 </script>
 </body>
 </html>
