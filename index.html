@@ -4,197 +4,364 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>learning .log</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0e0e0e;
-  --surface: #161616;
-  --border: #2a2a2a;
-  --text: #e8e4dc;
-  --muted: #6b6760;
-  --accent: #c8b89a;
-  --accent-dim: #3a3228;
-  --green-bright: #7dbf8e;
-}
+
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Mono', monospace;
+  background: #c8c5be;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.04) 1px, rgba(0,0,0,0.04) 2px),
+    repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.04) 1px, rgba(0,0,0,0.04) 2px);
+  background-size: 8px 8px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── MENU BAR ── */
+.menubar {
+  background: #e8e8e8;
+  border-bottom: 1px solid #999;
+  padding: 3px 14px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.menubar .apple { font-size: 14px; }
+.menubar span { color: #000; cursor: default; user-select: none; }
+.menubar .clock { margin-left: auto; font-size: 11px; font-weight: normal; }
+
+/* ── DESKTOP ── */
+.desktop {
+  flex: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 24px 16px;
 }
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse at 20% 50%, rgba(74,124,89,0.06) 0%, transparent 60%),
-              radial-gradient(ellipse at 80% 20%, rgba(200,184,154,0.04) 0%, transparent 50%);
-  pointer-events: none;
-}
-.container {
-  max-width: 600px;
+
+/* ── STARTUP WINDOW ── */
+.startup-window {
+  background: #f0ede6;
+  border: 2px solid #888;
+  border-radius: 8px;
+  box-shadow: 4px 4px 0 #2a3a2a;
   width: 100%;
-  position: relative;
-  z-index: 1;
-  animation: fadeUp 0.8s ease both;
+  max-width: 420px;
+  overflow: hidden;
+  animation: bootUp 0.5s ease both;
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes bootUp {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
-.tag {
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  color: var(--green-bright);
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
+
+.startup-titlebar {
+  background: linear-gradient(180deg, #f0f0f0 0%, #c0bdb5 100%);
+  border-bottom: 1px solid #888;
+  padding: 5px 10px;
   display: flex;
   align-items: center;
   gap: 8px;
+  user-select: none;
 }
-.tag::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--green-bright);
-  animation: pulse 2s ease infinite;
+.close-box { width: 13px; height: 13px; border: 1.5px solid #555; background: #d4d0c8; flex-shrink: 0; }
+.titlebar-text { font-size: 12px; font-weight: bold; color: #000; flex: 1; text-align: center; letter-spacing: 0.04em; }
+
+/* ── STARTUP BODY ── */
+.startup-body {
+  padding: 32px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #f5f2eb;
 }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(2.5rem, 8vw, 4rem);
-  font-weight: 400;
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.02em;
+
+/* mac icon — pixelish */
+.mac-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 20px;
 }
-h1 em { font-style: italic; color: var(--accent); }
-.subtitle {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 3rem;
+
+.welcome-text {
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
   letter-spacing: 0.04em;
+  margin-bottom: 4px;
 }
-.divider {
+.welcome-sub {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+
+/* progress bar */
+.progress-wrap {
+  width: 180px;
+  height: 14px;
+  border: 1.5px solid #888;
+  border-radius: 2px;
+  background: #e0ddd6;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.progress-bar {
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    #555 0px, #555 6px,
+    #888 6px, #888 8px
+  );
+  width: 0%;
+  animation: fillBar 1.8s ease forwards 0.3s;
+}
+@keyframes fillBar { to { width: 100%; } }
+
+/* divider */
+.startup-divider {
+  width: 100%;
   border: none;
-  border-top: 1px solid var(--border);
-  margin-bottom: 2rem;
+  border-top: 1px solid #c8c5be;
+  margin-bottom: 20px;
 }
-.section-label {
-  font-size: 10px;
-  letter-spacing: 0.2em;
+
+/* reference links */
+.ref-label {
+  font-size: 9px;
   text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.22em;
+  color: #888;
+  margin-bottom: 10px;
+  align-self: flex-start;
+  width: 100%;
 }
-.links { display: flex; flex-direction: column; gap: 2px; }
+
+.links { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+
 .link-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  gap: 10px;
+  padding: 9px 12px;
+  background: #eae7e0;
+  border: 1.5px solid #888;
+  border-radius: 5px;
+  box-shadow: 2px 2px 0 #aaa;
   text-decoration: none;
-  color: var(--text);
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.1s;
+  user-select: none;
 }
-.link-item::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 2px;
-  background: var(--accent);
-  transform: scaleY(0);
-  transition: transform 0.2s ease;
+.link-item:hover {
+  background: #4a6a8a;
+  border-color: #2a4a6a;
+  color: #fff;
+  box-shadow: none;
+  transform: translate(2px, 2px);
 }
-.link-item:hover { border-color: var(--accent-dim); background: #1a1a1a; transform: translateX(4px); }
-.link-item:hover::before { transform: scaleY(1); }
-.link-icon { font-size: 16px; color: var(--accent); flex-shrink: 0; width: 20px; text-align: center; font-family: 'DM Mono', monospace; }
-.link-content { flex: 1; }
-.link-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
-.link-desc { font-size: 11px; color: var(--muted); }
-.link-tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--accent-dim); color: var(--accent); border: 1px solid #4a3a28; flex-shrink: 0; }
-.link-arrow { color: var(--muted); font-size: 14px; transition: color 0.2s, transform 0.2s; }
-.link-item:hover .link-arrow { color: var(--accent); transform: translateX(3px); }
+.link-item:hover .link-desc { color: #c0d0e0; }
+.link-item:hover .link-arrow { color: #fff; }
+.link-item:hover .link-badge { background: #2a4a6a; color: #c0d0e0; border-color: #1a3a5a; }
+
+.link-icon {
+  font-size: 13px;
+  font-weight: bold;
+  color: inherit;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+  font-family: 'DM Mono', monospace;
+}
+.link-content { flex: 1; text-align: left; }
+.link-title { font-size: 12px; font-weight: bold; margin-bottom: 1px; }
+.link-desc { font-size: 10px; color: #666; }
+.link-badge {
+  font-size: 9px;
+  padding: 2px 7px;
+  background: #d4d0c8;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  color: #555;
+  flex-shrink: 0;
+  box-shadow: 1px 1px 0 #bbb;
+}
+.link-arrow { color: #888; font-size: 12px; flex-shrink: 0; }
+
 .coming-soon {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: transparent;
-  border: 1px dashed var(--border);
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 2px;
-  cursor: default;
-}
-.coming-soon-icon { font-size: 16px; width: 20px; text-align: center; opacity: 0.4; }
-footer {
-  margin-top: 3rem;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1.5px dashed #bbb;
+  border-radius: 5px;
+  color: #aaa;
   font-size: 11px;
-  color: var(--muted);
+  cursor: default;
+  width: 100%;
+}
+
+/* ── WINDOW FOOTER ── */
+.startup-footer {
+  background: linear-gradient(180deg, #c8c5be 0%, #b8b5ae 100%);
+  border-top: 1px solid #888;
+  padding: 4px 12px;
+  font-size: 10px;
+  color: #555;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid var(--border);
-  padding-top: 1.5rem;
+  user-select: none;
 }
-.blink { animation: blink 1.2s step-end infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* desktop icons top-right */
+.desktop-icons {
+  position: fixed;
+  top: 44px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-top: 12px;
+}
+.desk-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: default;
+  user-select: none;
+}
+.desk-icon-img {
+  width: 32px; height: 32px;
+  background: #f0ede6;
+  border: 1.5px solid #666;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.desk-icon-label {
+  font-size: 10px;
+  color: #000;
+  background: #c8c5be;
+  padding: 1px 4px;
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="tag">active session</div>
 
-  <h1>learning <em>.log</em></h1>
-  <p class="subtitle">a personal knowledge base &nbsp;&#183;&nbsp; built in the terminal</p>
+<div class="menubar">
+  <span class="apple">&#63743;</span>
+  <span>File</span>
+  <span>Edit</span>
+  <span>View</span>
+  <span>Special</span>
+  <span class="clock" id="clock">12:00 PM</span>
+</div>
 
-  <hr class="divider">
+<div class="desktop">
 
-  <p class="section-label">Reference</p>
+  <div class="startup-window">
 
-  <div class="links">
-    <a href="bash-skills.html" class="link-item">
-      <span class="link-icon">$_</span>
-      <div class="link-content">
-        <div class="link-title">bash skills</div>
-        <div class="link-desc">Commands, building blocks, flags, and concepts</div>
-      </div>
-      <span class="link-tag">in progress</span>
-      <span class="link-arrow">&#8594;</span>
-    </a>
-
-    <div class="coming-soon">
-      <span class="coming-soon-icon">+</span>
-      <span>more coming as we learn...</span>
+    <div class="startup-titlebar">
+      <span class="close-box"></span>
+      <span class="titlebar-text">learning .log</span>
     </div>
+
+    <div class="startup-body">
+
+      <!-- pixel mac icon as inline SVG -->
+      <svg class="mac-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+        <!-- monitor body -->
+        <rect x="4" y="2" width="24" height="20" rx="2" fill="#e8e5de" stroke="#555" stroke-width="1.5"/>
+        <!-- screen -->
+        <rect x="7" y="5" width="18" height="12" fill="#1a1a1a"/>
+        <!-- screen content - tiny terminal lines -->
+        <rect x="9" y="7" width="8" height="1" fill="#4a9a4a"/>
+        <rect x="9" y="9" width="12" height="1" fill="#4a9a4a"/>
+        <rect x="9" y="11" width="6" height="1" fill="#4a9a4a"/>
+        <rect x="9" y="13" width="3" height="1" fill="#c8c840" opacity="0.9"/>
+        <!-- chin -->
+        <rect x="7" y="18" width="18" height="3" fill="#d4d0c8" stroke="none"/>
+        <rect x="14" y="19" width="4" height="1" fill="#aaa"/>
+        <!-- neck -->
+        <rect x="13" y="22" width="6" height="3" fill="#c8c5be" stroke="#555" stroke-width="1"/>
+        <!-- base -->
+        <rect x="9" y="25" width="14" height="3" rx="1" fill="#c8c5be" stroke="#555" stroke-width="1"/>
+        <!-- disk slot -->
+        <rect x="20" y="20" width="5" height="1.5" fill="#888"/>
+      </svg>
+
+      <div class="welcome-text">Welcome to learning .log</div>
+      <div class="welcome-sub">a personal knowledge base &nbsp;·&nbsp; built in the terminal</div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar"></div>
+      </div>
+
+      <hr class="startup-divider">
+
+      <div class="ref-label">Reference</div>
+
+      <div class="links">
+        <a href="bash-skills.html" class="link-item">
+          <span class="link-icon">$_</span>
+          <div class="link-content">
+            <div class="link-title">bash skills</div>
+            <div class="link-desc">Commands, building blocks, flags, and concepts</div>
+          </div>
+          <span class="link-badge">in progress</span>
+          <span class="link-arrow">→</span>
+        </a>
+
+        <div class="coming-soon">
+          <span style="font-size:13px;">+</span>
+          <span>more coming as we learn...</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="startup-footer">
+      <span>enid &amp; anazial</span>
+      <span id="footer-time">--:--</span>
+    </div>
+
   </div>
 
-  <footer>
-    <span>enid &amp; anazial</span>
-    <span><span id="time"></span><span class="blink">_</span></span>
-  </footer>
 </div>
+
+<!-- desktop trash icon -->
+<div class="desktop-icons">
+  <div class="desk-icon">
+    <div class="desk-icon-img">🗑</div>
+    <span class="desk-icon-label">Trash</span>
+  </div>
+</div>
+
 <script>
 function tick() {
   const now = new Date();
-  document.getElementById('time').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  let h = now.getHours(), m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  const t = h + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+  document.getElementById('clock').textContent = t;
+  document.getElementById('footer-time').textContent = t;
 }
 tick();
-setInterval(tick, 1000);
+setInterval(tick, 10000);
 </script>
 </body>
 </html>
