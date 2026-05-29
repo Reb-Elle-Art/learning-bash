@@ -1126,4 +1126,495 @@ $ find . -name "*.rtf"</code>
             </div>
           </div>
 
-          <div class=
+          <div class="block-card">
+            <div class="block-header" onclick="toggleCard(this.closest('.block-card'))">
+              <div><div class="block-symbol">&amp;&amp;</div><div class="block-name">Run if previous succeeded</div></div>
+              <span class="chevron">▾</span>
+            </div>
+            <div class="block-detail">
+              <div class="dlabel">What it does</div>
+              <div class="dtext">Only runs the second command if the first one succeeded. Safer than semicolon for dependent commands.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">$ sudo apt update && sudo apt upgrade nginx</code>
+              <div class="dlabel">Tip</div>
+              <div class="dtext">If apt update fails, the upgrade won't run. Good for safety.</div>
+            </div>
+          </div>
+
+          <div class="block-card">
+            <div class="block-header" onclick="toggleCard(this.closest('.block-card'))">
+              <div><div class="block-symbol">|</div><div class="block-name">Pipe -- chain commands</div></div>
+              <span class="chevron">▾</span>
+            </div>
+            <div class="block-detail">
+              <div class="dlabel">What it does</div>
+              <div class="dtext">Takes the output of one command and feeds it as input to the next.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">$ cat file.txt | grep "session"
+$ ls | wc -l</code>
+              <div class="dlabel">Tip</div>
+              <div class="dtext">The second example counts how many files are in a directory.</div>
+            </div>
+          </div>
+
+          <div class="block-card">
+            <div class="block-header" onclick="toggleCard(this.closest('.block-card'))">
+              <div><div class="block-symbol">$()</div><div class="block-name">Command substitution</div></div>
+              <span class="chevron">▾</span>
+            </div>
+            <div class="block-detail">
+              <div class="dlabel">What it does</div>
+              <div class="dtext">Runs a command inside the parentheses and uses its output as a value in another command.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">$ for f in $(find . -name "*.txt"); do
+    pandoc "$f" -o "${f%.txt}.md"
+  done</code>
+              <div class="dlabel">Tip</div>
+              <div class="dtext">The find command runs first, then its list of files is used by the for loop.</div>
+            </div>
+          </div>
+
+          <div class="block-card">
+            <div class="block-header" onclick="toggleCard(this.closest('.block-card'))">
+              <div><div class="block-symbol">&gt; and &gt;&gt;</div><div class="block-name">Redirect output to file</div></div>
+              <span class="chevron">▾</span>
+            </div>
+            <div class="block-detail">
+              <div class="dlabel">What it does</div>
+              <div class="dtext">Instead of printing to the terminal, sends output to a file.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">$ echo "hello" > file.txt
+$ cat log.txt >> archive.txt</code>
+              <div class="dlabel">Difference</div>
+              <div class="dtext">&gt; overwrites the file. &gt;&gt; appends to the end without overwriting.</div>
+            </div>
+          </div>
+
+          <div class="block-card">
+            <div class="block-header" onclick="toggleCard(this.closest('.block-card'))">
+              <div><div class="block-symbol">\</div><div class="block-name">Escape -- handle spaces</div></div>
+              <span class="chevron">▾</span>
+            </div>
+            <div class="block-detail">
+              <div class="dlabel">What it does</div>
+              <div class="dtext">Escapes the next character. Most commonly used to handle spaces in file or directory names.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">$ cd My\ Documents
+$ mv file.md 00\ Human/001\ To\ Be\ Sorted/</code>
+              <div class="dlabel">Tip</div>
+              <div class="dtext">Alternatively, wrap the whole path in quotes: cd "My Documents"</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Scripting</div>
+        <div class="block-grid">
+          <div class="block-card">
+            <div class="block-header" onclick="toggleCard(this.closest('.block-card'))">
+              <div><div class="block-symbol">for loop</div><div class="block-name">Repeat for each item</div></div>
+              <span class="chevron">▾</span>
+            </div>
+            <div class="block-detail">
+              <div class="dlabel">What it does</div>
+              <div class="dtext">Repeats a command for each item in a list. The variable (f) takes the value of each item in turn.</div>
+              <div class="dlabel">Pattern</div>
+              <code class="dcode">for f in *.rtf; do
+  pandoc "$f" -o "${f%.rtf}.md"
+done</code>
+              <div class="dlabel">Breaking it down</div>
+              <div class="dtext">for f in *.rtf -- loop through every rtf file, calling it f each time. do...done -- wraps the commands to run on each. ${f%.rtf} -- strips the .rtf extension from the filename.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ FLAGS ══ -->
+  <div class="tab-panel" id="tab-flags">
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">Common flags and which commands use them. Click a command chip to jump to that command.</p>
+      <div class="flag-grid">
+
+        <div class="flag-card" id="flag--r">
+          <div class="flag-name">-r</div>
+          <div class="flag-meaning">Recursive -- apply to directories and everything inside them</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips">
+            <span class="cmd-chip" onclick="goToCmd('cp')">cp</span>
+            <span class="cmd-chip" onclick="goToCmd('rm')">rm</span>
+            <span class="cmd-chip" onclick="goToCmd('scp')">scp</span>
+            <span class="cmd-chip" onclick="goToCmd('grep')">grep</span>
+          </div>
+        </div>
+
+        <div class="flag-card" id="flag--a">
+          <div class="flag-name">-a</div>
+          <div class="flag-meaning">All -- include hidden files (those starting with .)</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('ls')">ls</span></div>
+        </div>
+
+        <div class="flag-card" id="flag--l">
+          <div class="flag-name">-l</div>
+          <div class="flag-meaning">Long format -- show detailed info (permissions, size, date)</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips">
+            <span class="cmd-chip" onclick="goToCmd('ls')">ls</span>
+            <span class="cmd-chip" onclick="goToCmd('wc')">wc</span>
+          </div>
+        </div>
+
+        <div class="flag-card" id="flag--lah">
+          <div class="flag-name">-lah</div>
+          <div class="flag-meaning">Combined: long format + all files + human-readable sizes. The most common ls combo.</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('ls')">ls</span></div>
+        </div>
+
+        <div class="flag-card" id="flag--h">
+          <div class="flag-name">-h</div>
+          <div class="flag-meaning">Human readable -- show sizes in KB, MB, GB instead of raw bytes</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips">
+            <span class="cmd-chip" onclick="goToCmd('ls')">ls</span>
+            <span class="cmd-chip" onclick="goToCmd('du')">du</span>
+          </div>
+        </div>
+
+        <div class="flag-card" id="flag--f">
+          <div class="flag-name">-f</div>
+          <div class="flag-meaning">Force -- skip confirmation prompts and override protections</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('rm')">rm</span></div>
+        </div>
+
+        <div class="flag-card" id="flag--i">
+          <div class="flag-name">-i</div>
+          <div class="flag-meaning">Interactive -- ask for confirmation before each action</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips">
+            <span class="cmd-chip" onclick="goToCmd('rm')">rm</span>
+            <span class="cmd-chip" onclick="goToCmd('grep')">grep</span>
+          </div>
+        </div>
+
+        <div class="flag-card" id="flag--s">
+          <div class="flag-name">-s</div>
+          <div class="flag-meaning">Summary -- show total only, not line-by-line breakdown</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('du')">du</span></div>
+        </div>
+
+        <div class="flag-card" id="flag--n">
+          <div class="flag-name">-n</div>
+          <div class="flag-meaning">Number -- specify how many lines to show</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips">
+            <span class="cmd-chip" onclick="goToCmd('head')">head</span>
+            <span class="cmd-chip" onclick="goToCmd('tail')">tail</span>
+          </div>
+        </div>
+
+        <div class="flag-card" id="flag--w">
+          <div class="flag-name">-w</div>
+          <div class="flag-meaning">Words -- count words instead of lines</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('wc')">wc</span></div>
+        </div>
+
+        <div class="flag-card" id="flag--o">
+          <div class="flag-name">-o</div>
+          <div class="flag-meaning">Output -- specify the output file or destination</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('pandoc')">pandoc</span></div>
+        </div>
+
+        <div class="flag-card" id="flag--c">
+          <div class="flag-name">-c</div>
+          <div class="flag-meaning">Custom format -- print only the fields you specify using % placeholders (GNU stat / Ubuntu only)</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('stat')">stat</span></div>
+          <div class="flag-used" style="margin-top:12px;">stat format specifiers</div>
+          <div class="spec-grid">
+            <span class="spec-key">%a</span><span class="spec-val">Octal permissions (e.g. 644)</span>
+            <span class="spec-key">%A</span><span class="spec-val">Symbolic permissions (e.g. -rw-r--r--)</span>
+            <span class="spec-key">%n</span><span class="spec-val">File name</span>
+            <span class="spec-key">%s</span><span class="spec-val">Size in bytes</span>
+            <span class="spec-key">%U</span><span class="spec-val">Owner username</span>
+            <span class="spec-key">%G</span><span class="spec-val">Group name</span>
+            <span class="spec-key">%F</span><span class="spec-val">File type (e.g. "regular file")</span>
+            <span class="spec-key">%i</span><span class="spec-val">Inode number</span>
+            <span class="spec-key">%h</span><span class="spec-val">Number of hard links</span>
+            <span class="spec-key">%x</span><span class="spec-val">Last accessed time</span>
+            <span class="spec-key">%y</span><span class="spec-val">Last modified time</span>
+          </div>
+        </div>
+
+        <div class="flag-card" id="flag--exec">
+          <div class="flag-name">-exec</div>
+          <div class="flag-meaning">Execute -- run a command on each result found. {} is the placeholder for the current file</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('find')">find</span></div>
+        </div>
+
+        <div class="flag-card" id="flag--name">
+          <div class="flag-name">-name</div>
+          <div class="flag-meaning">Match by filename -- supports wildcards like *.md</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('find')">find</span></div>
+        </div>
+
+        <div class="flag-card" id="flag--type">
+          <div class="flag-name">-type</div>
+          <div class="flag-meaning">Filter by file type. f = regular file, d = directory, l = symlink</div>
+          <div class="flag-used">Used in</div>
+          <div class="cmd-chips"><span class="cmd-chip" onclick="goToCmd('find')">find</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONCEPTS ══ -->
+  <div class="tab-panel" id="tab-concepts">
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">The bigger ideas behind the commands. Click to expand.</p>
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">CLI</div><div class="concept-sub">Command Line Interface</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">A text-based way to interact with a computer. You type commands, the computer responds with text. The alternative is a GUI (Graphical User Interface) where you click around. The CLI feels less intuitive at first but is far more powerful and scriptable.</div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Shell</div><div class="concept-sub">bash vs zsh</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">The shell is the program that reads your commands and runs them. bash is the default on Ubuntu, zsh is the default on modern macOS. They are almost identical for everyday use -- the differences only matter in advanced scripting.</div>
+            <code class="dcode" style="margin-top:8px;">Mac prompt:    %
+Ubuntu prompt: $
+Root prompt:   #</code>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Absolute vs relative paths</div><div class="concept-sub">Where you start from matters</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">An absolute path starts from the root of the filesystem and always works from anywhere. A relative path starts from wherever you currently are.</div>
+            <code class="dcode" style="margin-top:8px;">Absolute: /var/www/html/index.html
+Relative: documents/index.html</code>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">sudo &amp; root</div><div class="concept-sub">Admin privileges</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Root is the all-powerful admin account on Linux -- it can do anything, including break things. sudo (superuser do) lets your regular user borrow root power for a single command. sudo su switches you fully into root -- your prompt changes from $ to #. Always exit back out when done.</div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">File permissions</div><div class="concept-sub">Who can do what</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Every file has permissions for three groups: owner, group, and others. Each group can have read (r), write (w), and execute (x) rights. These appear symbolically in ls -l or as octal numbers with stat.</div>
+            <code class="dcode" style="margin-top:8px;">-rw-r--r--  →  644
+drwxr-xr-x  →  755
+-rw-------  →  600  (private)</code>
+            <div class="dtext" style="margin-top:8px;">The first character is the file type: - for file, d for directory, l for symlink.</div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Hidden files</div><div class="concept-sub">Dotfiles</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Any file or directory starting with . is hidden from ls by default. Configuration files are often hidden this way. Use ls -a to see them.</div>
+            <code class="dcode" style="margin-top:8px;">~/.openclaw
+~/.config
+~/.gitconfig</code>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Package managers</div><div class="concept-sub">brew and apt</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Package managers install, update, and remove software from a central repository. Think of them as app stores for the terminal. brew on Mac, apt on Ubuntu.</div>
+            <code class="dcode" style="margin-top:8px;">Mac:    brew install helix
+Ubuntu: sudo apt install helix</code>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Git &amp; .git</div><div class="concept-sub">Version control</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Git is a version control system -- a time machine for your files. It tracks every change so you can go back in time. The .git directory is a hidden folder Git creates inside any repository to store this history. It contains write-protected files which is why rm -r asks for confirmation.</div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">nginx</div><div class="concept-sub">Web server</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">nginx is a web server -- a program that listens for browser requests and serves files in response. It runs as a background service managed by systemctl. By default it serves files from /var/www/html/ and index.html loads automatically when you visit the root URL.</div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">LTS</div><div class="concept-sub">Long Term Support</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">LTS versions of software are supported with security updates for a longer period (5 years for Ubuntu). They are more stable and predictable than cutting-edge releases. Ubuntu 24.04 LTS (Noble Numbat) is what Enid runs.</div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">.bak convention</div><div class="concept-sub">Keeping backups</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Adding .bak to a filename is a common convention meaning "backup". The file is still there if you need it but programs and servers won't pick it up automatically. Better than deleting something you might want later.</div>
+            <code class="dcode" style="margin-top:8px;">$ mv index.nginx-debian.html index.nginx-debian.html.bak</code>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Tailscale &amp; SSH</div><div class="concept-sub">Private networking</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">SSH creates an encrypted tunnel to a remote machine. Tailscale creates a private network between your devices so you can SSH using hostnames instead of IPs, and services like nginx are only reachable by your tailnet devices -- not the public internet.</div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Markdown</div><div class="concept-sub">.md files</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Markdown is a simple text formatting language. Files end in .md. # makes a heading, ** makes bold, - makes a bullet. It is human-readable as plain text and also renders nicely in many apps. Commonly used for documentation and README files.</div>
+          </div>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Symlinks</div><div class="concept-sub">Symbolic links</div></div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">A symlink is a file that points to another file or directory -- like a shortcut. The OS transparently redirects you to the target when you open it. Shows up as l in ls -l and in stat output.</div>
+            <code class="dcode" style="margin-top:8px;">lrwxrwxrwx  python -> python3.11
+
+$ ln -s /path/to/target my-shortcut</code>
+            <div class="dtext" style="margin-top:8px;">If the target is deleted, the symlink breaks (dangling symlink). A hard link points to the data directly and stays valid even if the original is removed.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="win-footer">
+    <span>enid &amp; anazial</span>
+    <span id="footer-date">updated May 2026</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+function toggleCard(el) { el.classList.toggle('open'); }
+
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function filterCmd(cat, el) {
+  document.querySelectorAll('.fpill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#tab-commands .section').forEach(s => {
+    s.classList.toggle('hidden', cat !== 'all' && s.dataset.cat !== cat);
+  });
+}
+
+function goToFlag(flag) {
+  const flagsTab = document.querySelector('.tab[onclick*="flags"]');
+  switchTab('flags', flagsTab);
+  const id = 'flag-' + flag;
+  const card = document.getElementById(id);
+  if (!card) return;
+  document.querySelectorAll('.flag-card').forEach(c => c.classList.remove('highlight'));
+  card.classList.add('highlight');
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => card.classList.remove('highlight'), 2000);
+}
+
+function goToCmd(cmd) {
+  const commandsTab = document.querySelector('.tab[onclick*="commands"]');
+  switchTab('commands', commandsTab);
+  document.querySelectorAll('#tab-commands .section').forEach(s => s.classList.remove('hidden'));
+  document.querySelectorAll('.fpill').forEach(p => p.classList.remove('active'));
+  document.querySelector('.fpill[onclick*="all"]').classList.add('active');
+  const cards = document.querySelectorAll('#tab-commands .card');
+  for (const card of cards) {
+    const cmdEl = card.querySelector('.card-cmd');
+    if (cmdEl && cmdEl.textContent.trim() === cmd) {
+      card.classList.add('open');
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      break;
+    }
+  }
+}
+
+// live clock
+function tick() {
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  document.getElementById('clock').textContent =
+    h + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+}
+tick();
+setInterval(tick, 10000);
+</script>
+</body>
+</html>
