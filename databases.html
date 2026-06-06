@@ -273,12 +273,63 @@ body {
 }
 
 .hidden { display: none; }
+
+/* APPLE MENU DROPDOWN */
+.apple-menu { position: relative; display: inline-block; }
+.apple-menu .apple {
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  padding: 0 4px;
+}
+.apple-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #e8e8e8;
+  border: 1.5px solid #888;
+  border-top: none;
+  box-shadow: 2px 2px 0 #aaa;
+  min-width: 180px;
+  z-index: 200;
+  font-weight: normal;
+}
+.apple-menu:hover .apple-dropdown,
+.apple-menu.open .apple-dropdown { display: block; }
+.apple-dropdown a,
+.apple-dropdown div {
+  display: block;
+  padding: 4px 16px;
+  font-size: 12px;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.apple-dropdown a:hover,
+.apple-dropdown div:hover { background: #4a6a8a; color: #fff; }
+.apple-divider {
+  border: none;
+  border-top: 1px solid #aaa;
+  margin: 2px 0;
+  padding: 0;
+}
+.apple-divider:hover { background: none !important; }
+
 </style>
 </head>
 <body>
 
 <div class="menubar">
-  <a href="index.html" style="text-decoration:none;color:#000;font-size:14px;">&#63743;</a>
+  <div class="apple-menu">
+    <span class="apple">&#63743;</span>
+    <div class="apple-dropdown">
+      <a href="index.html">Return to learning .log</a>
+      <hr class="apple-divider">
+      <div onclick="void(0)">About this page</div>
+    </div>
+  </div>
   <span>File</span>
   <span>Edit</span>
   <span>View</span>
@@ -295,8 +346,6 @@ body {
   </div>
 
   <div class="tab-nav">
-    <a href="index.html" class="tab" title="Back to learning .log">&#63743;</a>
-    <span class="tab-divider"></span>
     <div class="tab active" onclick="switchTab('categories',this)">Categories</div>
     <div class="tab" onclick="switchTab('concepts',this)">Concepts</div>
     <div class="tab" onclick="switchTab('queries',this)">Queries</div>
