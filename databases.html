@@ -348,6 +348,7 @@ body {
   <div class="tab-nav">
     <div class="tab active" onclick="switchTab('categories',this)">Categories</div>
     <div class="tab" onclick="switchTab('concepts',this)">Concepts</div>
+    <div class="tab" onclick="switchTab('applications',this)">Applications</div>
     <div class="tab" onclick="switchTab('queries',this)">Queries</div>
   </div>
 
@@ -612,6 +613,243 @@ Delete --> DELETE</code>
         </div>
 
       </div>
+    </div>
+  </div>
+
+
+  <!-- APPLICATIONS -->
+  <div class="tab-panel" id="tab-applications">
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">Real world database choices -- and the reasoning behind them. Click to expand.</p>
+
+      <div class="section">
+        <div class="section-title">Real world applications</div>
+        <div class="cat-grid">
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon relational">R</span>
+              <span class="cat-name">Instagram</span>
+              <span class="cat-type">PostgreSQL</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">User accounts, posts, likes, follows</div>
+            <div class="cat-detail">
+              <div class="dlabel">Why relational</div>
+              <div class="dtext">Instagram's core data is deeply relational -- a user has posts, posts have likes, likes belong to users, users follow users. These relationships are well-defined and consistent. PostgreSQL enforces that structure and handles complex queries across those relationships efficiently.</div>
+              <div class="dlabel">The tradeoff</div>
+              <div class="dtext">As Instagram scaled to billions of users they layered other databases on top (Cassandra for feeds, Memcached for caching) -- but PostgreSQL remains the source of truth for structured user data.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon document">D</span>
+              <span class="cat-name">Airbnb</span>
+              <span class="cat-type">MongoDB (listings)</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Property listings with highly variable attributes</div>
+            <div class="cat-detail">
+              <div class="dlabel">Why document</div>
+              <div class="dtext">Every Airbnb listing is different. A treehouse has different attributes than a city apartment -- different amenities, different room types, different house rules. A rigid relational schema would require hundreds of nullable columns or complex joins. A document store lets each listing carry exactly the fields it needs.</div>
+              <div class="dlabel">The tradeoff</div>
+              <div class="dtext">Bookings and payments -- which are strictly structured and transactional -- use relational databases. The document store is specifically for the flexible listing data.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon keyvalue">K</span>
+              <span class="cat-name">Twitter / X</span>
+              <span class="cat-type">Redis (caching)</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Timeline caching, session storage, rate limiting</div>
+            <div class="cat-detail">
+              <div class="dlabel">Why key-value</div>
+              <div class="dtext">When millions of users load their timeline simultaneously, you can't query the database fresh every time -- it would collapse. Redis stores pre-computed timelines in memory keyed by user ID. A timeline request becomes a single key lookup taking microseconds instead of a complex database query taking seconds.</div>
+              <div class="dlabel">The tradeoff</div>
+              <div class="dtext">Redis is not the source of truth -- it's a cache. The real data lives in a relational database. If Redis goes down, the data isn't lost -- just slow until the cache rebuilds.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon graph">G</span>
+              <span class="cat-name">LinkedIn</span>
+              <span class="cat-type">Neo4j / custom graph</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">"People you may know", connection degrees</div>
+            <div class="cat-detail">
+              <div class="dlabel">Why graph</div>
+              <div class="dtext">LinkedIn's entire value proposition is the professional network -- who knows who, through how many degrees. "You and this person share 12 connections" requires traversing a web of relationships. In a relational database this would require many expensive joins. A graph database is purpose-built to traverse exactly this kind of connected data.</div>
+              <div class="dlabel">The tradeoff</div>
+              <div class="dtext">Graph databases are specialized. LinkedIn still uses relational databases for profiles, messages, and jobs -- the graph layer is specifically for relationship traversal and recommendations.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon timeseries">T</span>
+              <span class="cat-name">Cloudflare</span>
+              <span class="cat-type">InfluxDB / Prometheus</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Network traffic metrics, request rates, latency</div>
+            <div class="cat-detail">
+              <div class="dlabel">Why time-series</div>
+              <div class="dtext">Cloudflare processes trillions of requests and needs to track metrics -- requests per second, error rates, latency -- continuously across thousands of servers. This data is always in time order and always being queried by time range ("show me error rates for the last hour"). A time-series database is optimized exactly for this write-heavy, time-ordered workload.</div>
+              <div class="dlabel">The tradeoff</div>
+              <div class="dtext">Time-series databases typically auto-expire old data (you don't need millisecond metrics from 3 years ago). They're append-only -- you don't update or delete individual records.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon columnar">C</span>
+              <span class="cat-name">Spotify</span>
+              <span class="cat-type">BigQuery / Cassandra</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Listening history analytics, recommendation engine</div>
+            <div class="cat-detail">
+              <div class="dlabel">Why columnar</div>
+              <div class="dtext">Spotify needs to analyze billions of listening events to power Discover Weekly and Wrapped. Queries like "find all users who listened to jazz on Friday evenings in the last 6 months" scan one column across billions of rows. A columnar store does this orders of magnitude faster than a row-oriented database because it only reads the columns it needs.</div>
+              <div class="dlabel">The tradeoff</div>
+              <div class="dtext">Columnar databases are read-optimized, not write-optimized. Spotify uses separate operational databases for things that need fast individual writes (play events, playlists) and the columnar store for analytics.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section" style="margin-top:24px;">
+        <div class="section-title">Brand name directory</div>
+        <div class="cat-grid">
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon relational">R</span>
+              <span class="cat-name">Relational / SQL</span>
+              <span class="cat-type">structured, consistent</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">PostgreSQL, MySQL, SQLite, MariaDB, Oracle, SQL Server</div>
+            <div class="cat-detail">
+              <div class="dlabel">PostgreSQL</div>
+              <div class="dtext">Open source, full-featured, widely used in production. The go-to choice for most new projects. Often called "Postgres".</div>
+              <div class="dlabel">MySQL</div>
+              <div class="dtext">Open source, extremely common, powers a huge portion of the web. Used by Facebook, Twitter, YouTube historically.</div>
+              <div class="dlabel">SQLite</div>
+              <div class="dtext">Lightweight, serverless -- the entire database is a single file. Used in mobile apps, browsers, and local development. Not for multi-user production.</div>
+              <div class="dlabel">MariaDB</div>
+              <div class="dtext">A fork of MySQL created when Oracle acquired MySQL. Drop-in compatible with MySQL.</div>
+              <div class="dlabel">Oracle / SQL Server</div>
+              <div class="dtext">Enterprise commercial databases. Common in large corporations and legacy systems.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon document">D</span>
+              <span class="cat-name">Document stores</span>
+              <span class="cat-type">flexible, JSON-like</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">MongoDB, CouchDB, Firestore, DynamoDB (also key-value)</div>
+            <div class="cat-detail">
+              <div class="dlabel">MongoDB</div>
+              <div class="dtext">The most popular document database. Stores BSON (binary JSON). Very common in JavaScript / Node.js stacks.</div>
+              <div class="dlabel">Firestore</div>
+              <div class="dtext">Google's cloud document database. Very popular for mobile and web apps due to real-time sync capabilities.</div>
+              <div class="dlabel">CouchDB</div>
+              <div class="dtext">Open source, strong sync capabilities. Less common but used in offline-first applications.</div>
+              <div class="dlabel">DynamoDB</div>
+              <div class="dtext">Amazon's managed database. Technically a key-value and document store hybrid. Extremely scalable.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon keyvalue">K</span>
+              <span class="cat-name">Key-value stores</span>
+              <span class="cat-type">fast, simple lookups</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Redis, Memcached, DynamoDB, etcd</div>
+            <div class="cat-detail">
+              <div class="dlabel">Redis</div>
+              <div class="dtext">By far the most popular. In-memory, extremely fast. Supports more than just key-value -- also lists, sets, sorted sets. Used for caching, queues, pub/sub, and rate limiting.</div>
+              <div class="dlabel">Memcached</div>
+              <div class="dtext">Simpler and older than Redis. Pure caching, nothing else. Still used at scale (Facebook uses it heavily) but Redis has largely superseded it for new projects.</div>
+              <div class="dlabel">etcd</div>
+              <div class="dtext">Distributed key-value store used for configuration and service discovery. The backbone of Kubernetes.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon graph">G</span>
+              <span class="cat-name">Graph databases</span>
+              <span class="cat-type">relationships, networks</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Neo4j, Amazon Neptune, ArangoDB, TigerGraph</div>
+            <div class="cat-detail">
+              <div class="dlabel">Neo4j</div>
+              <div class="dtext">The most widely used graph database. Uses its own query language called Cypher. Strong community and tooling.</div>
+              <div class="dlabel">Amazon Neptune</div>
+              <div class="dtext">AWS's managed graph database. Supports both property graphs and RDF (knowledge graphs).</div>
+              <div class="dlabel">ArangoDB</div>
+              <div class="dtext">Multi-model database -- handles documents, key-value, and graphs in one system.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon timeseries">T</span>
+              <span class="cat-name">Time-series databases</span>
+              <span class="cat-type">metrics, events, monitoring</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">InfluxDB, Prometheus, TimescaleDB, Graphite</div>
+            <div class="cat-detail">
+              <div class="dlabel">InfluxDB</div>
+              <div class="dtext">Purpose-built time-series database. Very common for infrastructure monitoring and IoT data.</div>
+              <div class="dlabel">Prometheus</div>
+              <div class="dtext">Open source monitoring and alerting. Stores metrics as time-series. The standard in cloud-native / Kubernetes environments.</div>
+              <div class="dlabel">TimescaleDB</div>
+              <div class="dtext">Built on top of PostgreSQL -- adds time-series capabilities to a relational database. Good if you want SQL familiarity with time-series performance.</div>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon columnar">C</span>
+              <span class="cat-name">Columnar / analytics</span>
+              <span class="cat-type">warehousing, big data</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">BigQuery, Redshift, Snowflake, Cassandra, ClickHouse</div>
+            <div class="cat-detail">
+              <div class="dlabel">BigQuery</div>
+              <div class="dtext">Google's fully managed data warehouse. Serverless -- you just run queries and pay per data scanned. Very popular for analytics.</div>
+              <div class="dlabel">Redshift</div>
+              <div class="dtext">Amazon's data warehouse. Columnar storage, integrates tightly with the AWS ecosystem.</div>
+              <div class="dlabel">Snowflake</div>
+              <div class="dtext">Cloud-native data warehouse that separates storage and compute. Very popular in enterprise analytics.</div>
+              <div class="dlabel">Cassandra</div>
+              <div class="dtext">Apache's distributed database. Handles massive write volumes across many servers. Used by Netflix, Apple, and Instagram for high-scale operational data.</div>
+              <div class="dlabel">ClickHouse</div>
+              <div class="dtext">Open source columnar database known for extremely fast analytical queries. Growing quickly in popularity.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 
