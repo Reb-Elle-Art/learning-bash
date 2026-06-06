@@ -14,396 +14,597 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0e0e0e;
-  --surface: #161616;
-  --surface2: #1e1e1e;
-  --border: #2a2a2a;
-  --text: #e8e4dc;
-  --muted: #6b6760;
-  --accent: #c8b89a;
-  --accent-dim: #3a3228;
-  --green-bright: #7dbf8e;
-  --blue: #6b9ab8;
-  --blue-dim: #1a2e3a;
-  --purple: #9b8ab8;
-  --purple-dim: #2a1e3a;
-  --coral: #b87a6b;
-  --coral-dim: #3a1e1a;
-  --teal: #6bb8b0;
-  --teal-dim: #1a3a38;
+
+body {
+  background: #4a6a8a;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.05) 1px, rgba(0,0,0,0.05) 2px),
+    repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.05) 1px, rgba(0,0,0,0.05) 2px);
+  background-size: 8px 8px;
+  min-height: 100vh;
+  padding: 0;
+  font-family: 'DM Mono', monospace;
 }
-body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; padding: 2rem; }
-body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(107,154,184,0.05) 0%, transparent 60%); pointer-events: none; z-index: 0; }
-.container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; animation: fadeUp 0.6s ease both; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
 
-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
-.tag { font-size: 11px; letter-spacing: 0.15em; color: var(--blue); text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
-.tag::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: pulse 2s ease infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-h1 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; font-weight: 400; color: var(--text); letter-spacing: -0.02em; }
-h1 em { font-style: italic; color: var(--blue); }
+/* MENU BAR */
+.menubar {
+  background: #e8e8e8;
+  border-bottom: 1px solid #999;
+  padding: 3px 14px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.menubar .apple { font-size: 14px; }
+.menubar span { color: #000; cursor: default; user-select: none; }
+.menubar .clock { margin-left: auto; font-size: 11px; font-weight: normal; }
 
-.tab-nav { display: flex; gap: 2px; margin-bottom: 2rem; border-bottom: 1px solid var(--border); overflow-x: auto; }
-.tab { padding: 8px 18px; font-size: 12px; font-family: 'DM Mono', monospace; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; background: none; border-top: none; border-left: none; border-right: none; white-space: nowrap; }
-.tab:hover { color: var(--text); }
-.tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+/* DESKTOP */
+.desktop { padding: 20px 16px 40px; }
+
+/* WINDOW */
+.window {
+  background: #d4d0c8;
+  border-radius: 8px;
+  border: 2px solid #888;
+  box-shadow: 4px 4px 0 #1a2a3a;
+  overflow: hidden;
+  max-width: 860px;
+  margin: 0 auto;
+  animation: fadeUp 0.4s ease both;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+/* TITLE BAR */
+.titlebar {
+  background: linear-gradient(180deg, #f0f0f0 0%, #c0bdb5 100%);
+  border-bottom: 1px solid #888;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+.close-box { width: 13px; height: 13px; border: 1.5px solid #555; background: #d4d0c8; flex-shrink: 0; }
+.title-text { font-size: 12px; font-weight: bold; color: #000; flex: 1; text-align: center; letter-spacing: 0.04em; }
+
+/* TABS */
+.tab-nav {
+  background: #bab7b0;
+  border-bottom: 2px solid #888;
+  display: flex;
+  padding: 0 12px;
+  gap: 3px;
+  align-items: flex-end;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab {
+  background: #c8c5be;
+  border: 1.5px solid #888;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  padding: 4px 14px 5px;
+  font-size: 11px;
+  font-weight: bold;
+  font-family: 'DM Mono', monospace;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  user-select: none;
+  transition: background 0.1s;
+  text-decoration: none;
+  display: inline-block;
+}
+.tab:hover { background: #d0cdc6; }
+.tab.active { background: #eae7e0; border-bottom: 2px solid #eae7e0; color: #000; z-index: 1; }
+.tab-divider { width: 1px; background: #999; margin: 6px 4px; align-self: stretch; display: inline-block; }
+
+/* CONTENT */
+.content { background: #eae7e0; padding: 16px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
-.section { margin-bottom: 2.5rem; }
-.section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-.section-title { font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.2em; }
+/* SECTION */
+.section { margin-bottom: 20px; }
+.section-title {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #888;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #c0bdb5;
+}
 
-.category-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
-.cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; cursor: pointer; transition: all 0.15s; }
-.cat-card:hover { transform: translateY(-2px); }
-.cat-card.relational { border-top: 2px solid var(--blue); }
-.cat-card.relational:hover { border-color: var(--blue); }
-.cat-card.document { border-top: 2px solid var(--green-bright); }
-.cat-card.document:hover { border-color: var(--green-bright); }
-.cat-card.keyvalue { border-top: 2px solid var(--accent); }
-.cat-card.keyvalue:hover { border-color: var(--accent); }
-.cat-card.graph { border-top: 2px solid var(--purple); }
-.cat-card.graph:hover { border-color: var(--purple); }
-.cat-card.timeseries { border-top: 2px solid var(--teal); }
-.cat-card.timeseries:hover { border-color: var(--teal); }
-.cat-card.columnar { border-top: 2px solid var(--coral); }
-.cat-card.columnar:hover { border-color: var(--coral); }
+/* CATEGORY CARDS */
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
 
-.cat-top { padding: 14px 16px; }
-.cat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; }
-.relational .cat-label { color: var(--blue); }
-.document .cat-label { color: var(--green-bright); }
-.keyvalue .cat-label { color: var(--accent); }
-.graph .cat-label { color: var(--purple); }
-.timeseries .cat-label { color: var(--teal); }
-.columnar .cat-label { color: var(--coral); }
+.cat-card {
+  background: #f0ede6;
+  border: 1.5px solid #888;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 #aaa;
+  overflow: hidden;
+  transition: box-shadow 0.1s;
+}
+.cat-card:hover { box-shadow: 3px 3px 0 #888; }
 
-.cat-title { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 400; color: var(--text); margin-bottom: 6px; }
-.cat-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
-.cat-detail { display: none; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--surface2); animation: slideDown 0.2s ease; }
-.cat-card.open .cat-detail { display: block; }
+.cat-header {
+  background: linear-gradient(180deg, #dddad2 0%, #c8c5be 100%);
+  border-bottom: 1px solid #999;
+  padding: 7px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.cat-icon {
+  width: 16px; height: 16px;
+  border: 1.5px solid #666;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  flex-shrink: 0;
+  color: #333;
+}
+.cat-icon.relational  { background: #dde8f0; border-color: #4a6a8a; color: #4a6a8a; }
+.cat-icon.document    { background: #ddf0e0; border-color: #4a8a5a; color: #4a8a5a; }
+.cat-icon.keyvalue    { background: #f0ede0; border-color: #8a7a4a; color: #8a7a4a; }
+.cat-icon.graph       { background: #ede0f0; border-color: #7a4a8a; color: #7a4a8a; }
+.cat-icon.timeseries  { background: #ddf0ee; border-color: #4a8a86; color: #4a8a86; }
+.cat-icon.columnar    { background: #f0e0de; border-color: #8a4a4a; color: #8a4a4a; }
+
+.cat-name { font-size: 12px; font-weight: bold; color: #000; letter-spacing: 0.03em; }
+.cat-type { font-size: 10px; color: #666; margin-left: auto; text-align: right; }
+.chevron { font-size: 9px; color: #888; transition: transform 0.2s; flex-shrink: 0; margin-left: 4px; }
 .cat-card.open .chevron { transform: rotate(180deg); }
-.cat-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; border-top: 1px solid var(--border); }
-.examples-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
-.chevron { font-size: 10px; color: var(--muted); transition: transform 0.2s; }
 
-@keyframes slideDown { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.cat-detail {
+  display: none;
+  padding: 10px 12px 12px;
+  font-size: 11px;
+  line-height: 1.75;
+  color: #1a1a1a;
+  animation: slideDown 0.15s ease;
+}
+@keyframes slideDown { from { opacity:0; transform:translateY(-3px); } to { opacity:1; transform:translateY(0); } }
+.cat-card.open .cat-detail { display: block; }
 
-.detail-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 4px; margin-top: 10px; }
-.detail-label:first-child { margin-top: 0; }
-.detail-text { font-size: 12px; color: var(--text); line-height: 1.7; }
-.detail-example { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green-bright); background: #0a0a0a; border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; line-height: 1.7; margin-top: 4px; }
-.example-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-.example-pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
-.relational .example-pill { background: var(--blue-dim); color: var(--blue); border: 1px solid #1e3a4a; }
-.document .example-pill { background: rgba(125,191,142,0.1); color: var(--green-bright); border: 1px solid rgba(125,191,142,0.2); }
-.keyvalue .example-pill { background: var(--accent-dim); color: var(--accent); border: 1px solid #4a3a28; }
-.graph .example-pill { background: var(--purple-dim); color: var(--purple); border: 1px solid #3a2a4a; }
-.timeseries .example-pill { background: var(--teal-dim); color: var(--teal); border: 1px solid #1a3a38; }
-.columnar .example-pill { background: var(--coral-dim); color: var(--coral); border: 1px solid #4a2a1a; }
+.cat-examples {
+  padding: 6px 12px 8px;
+  background: #e8e5de;
+  border-top: 1px solid #c8c5be;
+  font-size: 10px;
+  color: #777;
+}
 
-.concept-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
-.concept-card { background: var(--surface); border: 1px solid var(--border); border-left: 2px solid var(--blue-dim); border-radius: 6px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; overflow: hidden; }
-.concept-card:hover { border-left-color: var(--blue); }
-.concept-card.open { border-left-color: var(--blue); }
-.concept-top { display: flex; justify-content: space-between; }
-.concept-term { font-size: 13px; font-weight: 500; color: var(--blue); margin-bottom: 4px; }
-.concept-def { font-size: 11px; color: var(--muted); line-height: 1.5; }
-.concept-detail { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); animation: slideDown 0.2s ease; }
+/* SHARED DETAIL STYLES */
+.dlabel {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #888;
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
+.dlabel:first-child { margin-top: 0; }
+.dtext { font-size: 11px; color: #222; line-height: 1.75; }
+.dcode {
+  display: block;
+  background: #1a1a1a;
+  color: #c8e0a8;
+  border: 1px solid #444;
+  border-radius: 3px;
+  padding: 7px 10px;
+  font-size: 10.5px;
+  font-family: 'DM Mono', monospace;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* CONCEPT CARDS */
+.concept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.concept-card {
+  background: #f0ede6;
+  border: 1.5px solid #888;
+  border-left: 4px solid #4a6a8a;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 #aaa;
+  overflow: hidden;
+}
+.concept-header {
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  user-select: none;
+}
+.concept-header:hover { background: rgba(0,0,0,0.03); }
+.concept-term { font-size: 12px; font-weight: bold; color: #000; margin-bottom: 3px; }
+.concept-sub { font-size: 10px; color: #777; }
+.concept-detail {
+  display: none;
+  padding: 8px 12px 12px;
+  border-top: 1px solid #c8c5be;
+  background: #e8e5de;
+  font-size: 11px;
+  line-height: 1.75;
+  color: #222;
+  animation: slideDown 0.15s ease;
+}
 .concept-card.open .concept-detail { display: block; }
 
-.coming-soon-card { background: transparent; border: 1px dashed var(--border); border-radius: 6px; padding: 14px 16px; color: var(--muted); font-size: 12px; display: flex; align-items: center; gap: 10px; }
+/* COMING SOON */
+.coming-soon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1.5px dashed #bbb;
+  border-radius: 6px;
+  color: #aaa;
+  font-size: 11px;
+  cursor: default;
+}
 
-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; }
-a.back { color: var(--muted); text-decoration: none; font-size: 11px; transition: color 0.15s; }
-a.back:hover { color: var(--blue); }
+/* WINDOW FOOTER */
+.win-footer {
+  background: linear-gradient(180deg, #c8c5be 0%, #b8b5ae 100%);
+  border-top: 1px solid #888;
+  padding: 4px 12px;
+  font-size: 10px;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+}
 
-.home-tab { text-decoration: none; font-size: 15px; padding: 6px 12px; color: var(--muted); transition: color 0.15s; border-bottom: 2px solid transparent; }
-.home-tab:hover { color: var(--accent); border-bottom-color: transparent; }
-.tab-divider { width: 1px; background: var(--border); margin: 6px 4px; align-self: stretch; display: inline-block; }
+.hidden { display: none; }
 </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <div class="tag">database 101</div>
-    <h1>data<em>bases.</em></h1>
-    <p style="font-size:12px;color:var(--muted);margin-top:0.5rem;">Categories, concepts, and eventually -- queries</p>
-  </header>
 
-  <div class="tab-nav">
-    <a href="index.html" class="tab home-tab" title="Back to learning .log">&#63743;</a>
-    <span class="tab-divider"></span>
-    <button class="tab active" onclick="switchTab('categories', this)">Categories</button>
-    <button class="tab" onclick="switchTab('concepts', this)">Concepts</button>
-    <button class="tab" onclick="switchTab('queries', this)">Queries</button>
+<div class="menubar">
+  <a href="index.html" style="text-decoration:none;color:#000;font-size:14px;">&#63743;</a>
+  <span>File</span>
+  <span>Edit</span>
+  <span>View</span>
+  <span>Special</span>
+  <span class="clock" id="clock">12:00 PM</span>
+</div>
+
+<div class="desktop">
+<div class="window">
+
+  <div class="titlebar">
+    <span class="close-box"></span>
+    <span class="title-text">databases</span>
   </div>
 
-  <!-- CATEGORIES TAB -->
+  <div class="tab-nav">
+    <a href="index.html" class="tab" title="Back to learning .log">&#63743;</a>
+    <span class="tab-divider"></span>
+    <div class="tab active" onclick="switchTab('categories',this)">Categories</div>
+    <div class="tab" onclick="switchTab('concepts',this)">Concepts</div>
+    <div class="tab" onclick="switchTab('queries',this)">Queries</div>
+  </div>
+
+  <!-- CATEGORIES -->
   <div class="tab-panel active" id="tab-categories">
-    <p style="font-size:12px;color:var(--muted);margin-bottom:1.5rem;">Databases come in several fundamentally different shapes. The right one depends on what your data looks like and how you need to use it. Click to expand.</p>
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">Databases come in several fundamentally different shapes. The right one depends on what your data looks like and how you need to use it. Click to expand.</p>
 
-    <div class="category-cards">
+      <div class="section">
+        <div class="section-title">Database types</div>
+        <div class="cat-grid">
 
-      <div class="cat-card relational" onclick="toggleCard(this)">
-        <div class="cat-top">
-          <div class="cat-label">Relational</div>
-          <div class="cat-title">SQL databases</div>
-          <div class="cat-desc">Data stored in tables with rows and columns. Relationships between tables defined by keys.</div>
-        </div>
-        <div class="cat-footer">
-          <div class="examples-label">e.g. PostgreSQL, MySQL, SQLite</div>
-          <div class="chevron">v</div>
-        </div>
-        <div class="cat-detail">
-          <div class="detail-label">How it works</div>
-          <div class="detail-text">Think of it like a very powerful spreadsheet. Data lives in tables -- each row is a record, each column is a field. Tables can reference each other through shared keys. You query data using SQL (Structured Query Language).</div>
-          <div class="detail-label">Good for</div>
-          <div class="detail-text">Structured data with clear relationships. Financial records, user accounts, orders, inventories -- anything where consistency and relationships matter.</div>
-          <div class="detail-label">Example mental model</div>
-          <div class="detail-example">Users table:      id | name  | email
-Orders table:     id | user_id | product | price
-                       ^--- references Users.id</div>
-          <div class="detail-label">Key idea</div>
-          <div class="detail-text">The schema (structure) is defined upfront. Every row in a table must follow the same shape. This rigidity is a feature -- it enforces consistency.</div>
-        </div>
-      </div>
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon relational">R</span>
+              <span class="cat-name">Relational / SQL</span>
+              <span class="cat-type">PostgreSQL, MySQL, SQLite</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Tables, rows, columns -- like a very powerful spreadsheet</div>
+            <div class="cat-detail">
+              <div class="dlabel">How it works</div>
+              <div class="dtext">Data lives in tables -- each row is a record, each column is a field. Tables can reference each other through shared keys. You query data using SQL (Structured Query Language).</div>
+              <div class="dlabel">Good for</div>
+              <div class="dtext">Structured data with clear relationships. Financial records, user accounts, orders, inventories -- anything where consistency and relationships matter.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">Users table:   id | name  | email
+Orders table:  id | user_id | product | price
+                    ^--- references Users.id</code>
+              <div class="dlabel">Key idea</div>
+              <div class="dtext">The schema (structure) is defined upfront. Every row must follow the same shape. This rigidity is a feature -- it enforces consistency.</div>
+            </div>
+          </div>
 
-      <div class="cat-card document" onclick="toggleCard(this)">
-        <div class="cat-top">
-          <div class="cat-label">Document</div>
-          <div class="cat-title">NoSQL -- document stores</div>
-          <div class="cat-desc">Data stored as flexible documents (usually JSON-like). No fixed schema required.</div>
-        </div>
-        <div class="cat-footer">
-          <div class="examples-label">e.g. MongoDB, CouchDB, Firestore</div>
-          <div class="chevron">v</div>
-        </div>
-        <div class="cat-detail">
-          <div class="detail-label">How it works</div>
-          <div class="detail-text">Instead of rows in tables, you store documents -- self-contained blobs of data, usually in JSON format. Each document can have a different structure. No need to define a schema first.</div>
-          <div class="detail-label">Good for</div>
-          <div class="detail-text">Flexible or evolving data structures. Content management, user profiles, product catalogs where each item might have different fields.</div>
-          <div class="detail-label">Example mental model</div>
-          <div class="detail-example">{
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon document">D</span>
+              <span class="cat-name">Document store</span>
+              <span class="cat-type">MongoDB, CouchDB, Firestore</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">JSON-like documents -- flexible, no fixed schema required</div>
+            <div class="cat-detail">
+              <div class="dlabel">How it works</div>
+              <div class="dtext">Instead of rows in tables, you store documents -- self-contained blobs of data, usually in JSON format. Each document can have a different structure.</div>
+              <div class="dlabel">Good for</div>
+              <div class="dtext">Flexible or evolving data structures. Content management, user profiles, product catalogs where each item might have different fields.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">{
   "name": "Anazial",
   "email": "hi@example.com",
   "preferences": { "theme": "dark" }
-}</div>
-          <div class="detail-label">Key idea</div>
-          <div class="detail-text">Schema-flexible. Documents in the same collection don't have to look the same. Great for rapid development when your data shape is still evolving.</div>
-        </div>
-      </div>
+}</code>
+              <div class="dlabel">Key idea</div>
+              <div class="dtext">Schema-flexible. Documents in the same collection don't have to look the same. Great for rapid development when your data shape is still evolving.</div>
+            </div>
+          </div>
 
-      <div class="cat-card keyvalue" onclick="toggleCard(this)">
-        <div class="cat-top">
-          <div class="cat-label">Key-Value</div>
-          <div class="cat-title">NoSQL -- key-value stores</div>
-          <div class="cat-desc">The simplest database model. Every piece of data is stored and retrieved by a unique key.</div>
-        </div>
-        <div class="cat-footer">
-          <div class="examples-label">e.g. Redis, DynamoDB, Memcached</div>
-          <div class="chevron">v</div>
-        </div>
-        <div class="cat-detail">
-          <div class="detail-label">How it works</div>
-          <div class="detail-text">Like a giant dictionary or lookup table. You store a value under a key, and retrieve it by that key. Extremely fast -- often held entirely in memory.</div>
-          <div class="detail-label">Good for</div>
-          <div class="detail-text">Caching, session storage, leaderboards, real-time features. Anywhere you need to look something up by a known identifier very quickly.</div>
-          <div class="detail-label">Example mental model</div>
-          <div class="detail-example">SET session:abc123  "user_id=42"
-GET session:abc123  --> "user_id=42"</div>
-          <div class="detail-label">Key idea</div>
-          <div class="detail-text">Sacrifices complexity for speed. You can't easily query "all values where X" -- you retrieve by key only. Often used alongside a relational database, not instead of one.</div>
-        </div>
-      </div>
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon keyvalue">K</span>
+              <span class="cat-name">Key-value store</span>
+              <span class="cat-type">Redis, DynamoDB, Memcached</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">The simplest model -- store and retrieve by a unique key</div>
+            <div class="cat-detail">
+              <div class="dlabel">How it works</div>
+              <div class="dtext">Like a giant dictionary. You store a value under a key, and retrieve it by that key. Extremely fast -- often held entirely in memory.</div>
+              <div class="dlabel">Good for</div>
+              <div class="dtext">Caching, session storage, leaderboards, real-time features. Anywhere you need to look something up very quickly by a known identifier.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">SET session:abc123  "user_id=42"
+GET session:abc123  --> "user_id=42"</code>
+              <div class="dlabel">Key idea</div>
+              <div class="dtext">Sacrifices complexity for speed. You can't easily query "all values where X" -- you retrieve by key only. Often used alongside a relational database, not instead of one.</div>
+            </div>
+          </div>
 
-      <div class="cat-card graph" onclick="toggleCard(this)">
-        <div class="cat-top">
-          <div class="cat-label">Graph</div>
-          <div class="cat-title">NoSQL -- graph databases</div>
-          <div class="cat-desc">Data stored as nodes and edges. Built for highly connected data and relationship traversal.</div>
-        </div>
-        <div class="cat-footer">
-          <div class="examples-label">e.g. Neo4j, Amazon Neptune</div>
-          <div class="chevron">v</div>
-        </div>
-        <div class="cat-detail">
-          <div class="detail-label">How it works</div>
-          <div class="detail-text">Data is represented as a network of nodes (things) connected by edges (relationships). Querying means traversing those connections.</div>
-          <div class="detail-label">Good for</div>
-          <div class="detail-text">Social networks, recommendation engines, fraud detection, knowledge graphs -- anything where the connections between things are as important as the things themselves.</div>
-          <div class="detail-label">Example mental model</div>
-          <div class="detail-example">(Anazial) --[FOLLOWS]--> (Enid)
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon graph">G</span>
+              <span class="cat-name">Graph database</span>
+              <span class="cat-type">Neo4j, Amazon Neptune</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Nodes and edges -- built for highly connected data</div>
+            <div class="cat-detail">
+              <div class="dlabel">How it works</div>
+              <div class="dtext">Data is represented as a network of nodes (things) connected by edges (relationships). Querying means traversing those connections.</div>
+              <div class="dlabel">Good for</div>
+              <div class="dtext">Social networks, recommendation engines, fraud detection -- anything where the connections between things are as important as the things themselves.</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">(Anazial) --[USES]--> (bash)
 (Enid) --[RUNS]--> (nginx)
-(Anazial) --[USES]--> (bash)</div>
-          <div class="detail-label">Key idea</div>
-          <div class="detail-text">Relational databases can model relationships too, but graph databases make traversing deep, complex relationships much faster and more natural.</div>
-        </div>
-      </div>
+(Anazial) --[CONNECTS_TO]--> (Enid)</code>
+              <div class="dlabel">Key idea</div>
+              <div class="dtext">Relational databases can model relationships too, but graph databases make traversing deep, complex relationships much faster and more natural.</div>
+            </div>
+          </div>
 
-      <div class="cat-card timeseries" onclick="toggleCard(this)">
-        <div class="cat-top">
-          <div class="cat-label">Time-series</div>
-          <div class="cat-title">Optimized for time-stamped data</div>
-          <div class="cat-desc">Built specifically for data that arrives in time order and is queried by time ranges.</div>
-        </div>
-        <div class="cat-footer">
-          <div class="examples-label">e.g. InfluxDB, TimescaleDB, Prometheus</div>
-          <div class="chevron">v</div>
-        </div>
-        <div class="cat-detail">
-          <div class="detail-label">How it works</div>
-          <div class="detail-text">Every data point is associated with a timestamp. The database is optimized for writing large volumes of time-ordered data and querying ranges or aggregates over time.</div>
-          <div class="detail-label">Good for</div>
-          <div class="detail-text">Server metrics, IoT sensor data, financial tick data, logs, monitoring dashboards. Anywhere you're asking "what happened between X time and Y time".</div>
-          <div class="detail-label">Example mental model</div>
-          <div class="detail-example">2026-05-23 22:05:01  cpu_usage=12%
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon timeseries">T</span>
+              <span class="cat-name">Time-series</span>
+              <span class="cat-type">InfluxDB, TimescaleDB, Prometheus</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Optimized for time-stamped data and range queries</div>
+            <div class="cat-detail">
+              <div class="dlabel">How it works</div>
+              <div class="dtext">Every data point is associated with a timestamp. The database is optimized for writing large volumes of time-ordered data and querying ranges or aggregates over time.</div>
+              <div class="dlabel">Good for</div>
+              <div class="dtext">Server metrics, IoT sensor data, financial tick data, logs, monitoring dashboards. Anywhere you're asking "what happened between X time and Y time".</div>
+              <div class="dlabel">Example</div>
+              <code class="dcode">2026-05-23 22:05:01  cpu_usage=12%
 2026-05-23 22:05:02  cpu_usage=14%
-2026-05-23 22:05:03  cpu_usage=11%</div>
+2026-05-23 22:05:03  cpu_usage=11%</code>
+            </div>
+          </div>
+
+          <div class="cat-card">
+            <div class="cat-header" onclick="toggleCard(this.closest('.cat-card'))">
+              <span class="cat-icon columnar">C</span>
+              <span class="cat-name">Columnar store</span>
+              <span class="cat-type">BigQuery, Redshift, Cassandra</span>
+              <span class="chevron">&#9662;</span>
+            </div>
+            <div class="cat-examples">Column-oriented storage -- built for analytics at scale</div>
+            <div class="cat-detail">
+              <div class="dlabel">How it works</div>
+              <div class="dtext">Traditional databases store each row together on disk. Columnar databases store each column together. This makes scanning a single column across millions of rows extremely fast.</div>
+              <div class="dlabel">Good for</div>
+              <div class="dtext">Data warehousing, analytics, business intelligence. Queries like "average revenue across all orders last year" are much faster than in row-oriented databases.</div>
+              <div class="dlabel">Key idea</div>
+              <div class="dtext">Optimized for reads across many rows, not for frequent writes to individual rows. Usually used alongside a transactional database, not instead of it.</div>
+            </div>
+          </div>
+
         </div>
       </div>
-
-      <div class="cat-card columnar" onclick="toggleCard(this)">
-        <div class="cat-top">
-          <div class="cat-label">Columnar</div>
-          <div class="cat-title">Column-oriented stores</div>
-          <div class="cat-desc">Like relational but stores data by column rather than by row. Built for analytics at scale.</div>
-        </div>
-        <div class="cat-footer">
-          <div class="examples-label">e.g. BigQuery, Redshift, Cassandra</div>
-          <div class="chevron">v</div>
-        </div>
-        <div class="cat-detail">
-          <div class="detail-label">How it works</div>
-          <div class="detail-text">Traditional databases store each row together on disk. Columnar databases store each column together. This makes scanning a single column across millions of rows extremely fast.</div>
-          <div class="detail-label">Good for</div>
-          <div class="detail-text">Data warehousing, analytics, business intelligence. Queries like "average revenue across all orders last year" are much faster than in row-oriented databases.</div>
-          <div class="detail-label">Key idea</div>
-          <div class="detail-text">Optimized for reads across many rows, not for frequent writes or updates to individual rows. You'd use this alongside a transactional database, not instead of it.</div>
-        </div>
-      </div>
-
     </div>
   </div>
 
-  <!-- CONCEPTS TAB -->
+  <!-- CONCEPTS -->
   <div class="tab-panel" id="tab-concepts">
-    <p style="font-size:12px;color:var(--muted);margin-bottom:1.5rem;">The vocabulary of databases. Click to expand.</p>
-    <div class="concept-cards">
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">The vocabulary of databases. Click to expand.</p>
+      <div class="concept-grid">
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Schema</div><div class="concept-def">The structure definition of a database</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">A schema defines the shape of your data -- what tables exist, what columns they have, what types of data each column accepts. In relational databases the schema is strict and defined upfront. In document databases it can be loose or absent entirely.</div>
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Schema</div><div class="concept-sub">The structure definition</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Defines the shape of your data -- what tables exist, what columns they have, what types each column accepts. In relational databases the schema is strict and defined upfront. In document databases it can be loose or absent entirely.</div>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">SQL</div><div class="concept-def">Structured Query Language</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">The language used to interact with relational databases. You use it to create tables, insert data, and query for results. SQL is a standard -- the same core syntax works across PostgreSQL, MySQL, SQLite and others, with small differences.</div>
-          <div class="detail-example" style="margin-top:8px;">SELECT name FROM users WHERE id = 42;</div>
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">SQL</div><div class="concept-sub">Structured Query Language</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">The language used to interact with relational databases. Used to create tables, insert data, and query for results. SQL is a standard -- the same core syntax works across PostgreSQL, MySQL, SQLite with small differences.</div>
+            <code class="dcode" style="margin-top:8px;">SELECT name FROM users WHERE id = 42;</code>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">NoSQL</div><div class="concept-def">Not Only SQL</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">A broad term for databases that don't use the traditional relational table model. Includes document, key-value, graph, and time-series databases. Not a single thing -- just means "not a traditional SQL database". Each type has its own query language or API.</div>
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">NoSQL</div><div class="concept-sub">Not Only SQL</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">A broad term for databases that don't use the traditional relational table model. Includes document, key-value, graph, and time-series databases. Not a single thing -- just means "not a traditional SQL database". Each type has its own query language or API.</div>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Primary key</div><div class="concept-def">A unique identifier for each row</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">Every row in a relational database table needs a unique identifier -- the primary key. Usually an auto-incrementing integer (1, 2, 3...) or a UUID. It's how you refer to a specific record unambiguously.</div>
-          <div class="detail-example" style="margin-top:8px;">id | name    | email
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Primary key</div><div class="concept-sub">Unique identifier for each row</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Every row in a relational table needs a unique identifier. Usually an auto-incrementing integer (1, 2, 3...) or a UUID. It's how you refer to a specific record unambiguously.</div>
+            <code class="dcode" style="margin-top:8px;">id | name    | email
 1  | Anazial | ...
 2  | Enid    | ...
-^-- primary key</div>
+^-- primary key</code>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Foreign key</div><div class="concept-def">A reference to another table's primary key</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">How relational databases link tables together. A foreign key in one table points to the primary key in another. This is what makes relational databases relational -- you can connect data across tables without duplicating it.</div>
-          <div class="detail-example" style="margin-top:8px;">orders table:
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Foreign key</div><div class="concept-sub">A reference to another table</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">How relational databases link tables together. A foreign key in one table points to the primary key in another. This is what makes relational databases relational -- connecting data across tables without duplicating it.</div>
+            <code class="dcode" style="margin-top:8px;">orders:
 order_id | user_id | product
 1        | 42      | keyboard
-              ^-- foreign key pointing to users.id</div>
+              ^-- foreign key --> users.id</code>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Index</div><div class="concept-def">A lookup structure for faster queries</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">Without an index, finding a row means scanning the whole table. An index is a separate data structure that lets the database jump directly to matching rows. Think of it like the index at the back of a book. Speeds up reads but slows down writes slightly.</div>
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Index</div><div class="concept-sub">A lookup structure for faster queries</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Without an index, finding a row means scanning the whole table. An index is a separate data structure that lets the database jump directly to matching rows. Like the index at the back of a book. Speeds up reads but slows writes slightly.</div>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">CRUD</div><div class="concept-def">The four basic database operations</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">Every database interaction is one of four things: Create, Read, Update, Delete. In SQL these map to INSERT, SELECT, UPDATE, DELETE. You'll see CRUD used everywhere in software development as a shorthand for basic data operations.</div>
-          <div class="detail-example" style="margin-top:8px;">Create --> INSERT
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">CRUD</div><div class="concept-sub">The four basic operations</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Every database interaction is one of four things: Create, Read, Update, Delete. In SQL these map to INSERT, SELECT, UPDATE, DELETE. You'll see CRUD everywhere in software development as shorthand for basic data operations.</div>
+            <code class="dcode" style="margin-top:8px;">Create --> INSERT
 Read   --> SELECT
 Update --> UPDATE
-Delete --> DELETE</div>
+Delete --> DELETE</code>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">Transaction</div><div class="concept-def">A group of operations that succeed or fail together</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">A transaction bundles multiple operations so they either all succeed or all fail -- never half-complete. The classic example: transferring money means subtracting from one account and adding to another. If the system crashes in between, you don't want one to happen without the other.</div>
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">Transaction</div><div class="concept-sub">Operations that succeed or fail together</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">A transaction bundles multiple operations so they either all succeed or all fail -- never half-complete. The classic example: transferring money means subtracting from one account and adding to another. If the system crashes in between, you don't want one to happen without the other.</div>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">ACID</div><div class="concept-def">Properties of reliable transactions</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">ACID stands for Atomicity (all or nothing), Consistency (data stays valid), Isolation (transactions don't interfere), Durability (committed data persists). Relational databases are ACID-compliant. Many NoSQL databases trade some ACID properties for speed or scale.</div>
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">ACID</div><div class="concept-sub">Properties of reliable transactions</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">Atomicity (all or nothing), Consistency (data stays valid), Isolation (transactions don't interfere), Durability (committed data persists). Relational databases are ACID-compliant. Many NoSQL databases trade some ACID properties for speed or scale.</div>
+          </div>
         </div>
-      </div>
 
-      <div class="concept-card" onclick="toggleCard(this)">
-        <div class="concept-top"><div><div class="concept-term">ORM</div><div class="concept-def">Object Relational Mapper</div></div><span style="color:var(--muted);font-size:10px;">v</span></div>
-        <div class="concept-detail">
-          <div class="detail-text" style="font-size:12px;line-height:1.7;">A library that lets you interact with a database using your programming language instead of raw SQL. Instead of writing SELECT * FROM users, you might write User.find(42). Easier to work with but adds a layer of abstraction. Examples: SQLAlchemy (Python), ActiveRecord (Ruby), Prisma (JavaScript).</div>
+        <div class="concept-card">
+          <div class="concept-header" onclick="toggleCard(this.closest('.concept-card'))">
+            <div><div class="concept-term">ORM</div><div class="concept-sub">Object Relational Mapper</div></div>
+            <span class="chevron">&#9662;</span>
+          </div>
+          <div class="concept-detail">
+            <div class="dtext">A library that lets you interact with a database using your programming language instead of raw SQL. Instead of writing SELECT * FROM users, you might write User.find(42). Examples: SQLAlchemy (Python), ActiveRecord (Ruby), Prisma (JavaScript).</div>
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 
-  <!-- QUERIES TAB -->
+  <!-- QUERIES -->
   <div class="tab-panel" id="tab-queries">
-    <p style="font-size:12px;color:var(--muted);margin-bottom:1.5rem;">SQL queries and database interactions -- to be built out as we learn.</p>
-    <div class="coming-soon-card">
-      <span style="opacity:0.4;font-size:16px;">+</span>
-      <span>coming soon -- queries, joins, and more</span>
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">SQL queries and database interactions -- to be built out as we learn.</p>
+      <div class="coming-soon">
+        <span style="font-size:13px;">+</span>
+        <span>coming soon -- queries, joins, and more</span>
+      </div>
     </div>
   </div>
 
-  <footer>
-    <a href="index.html" class="back">&#8592; back to learning .log</a>
+  <div class="win-footer">
+    <span>enid &amp; anazial</span>
     <span>updated June 2026</span>
-  </footer>
+  </div>
+
+</div>
 </div>
 
 <script>
 function toggleCard(el) { el.classList.toggle('open'); }
+
 function switchTab(name, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
 }
+
+function tick() {
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  document.getElementById('clock').textContent =
+    h + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+}
+tick();
+setInterval(tick, 10000);
 </script>
 </body>
 </html>
