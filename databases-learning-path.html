@@ -232,7 +232,7 @@ body {
       <div class="section">
         <div class="section-title">The goal</div>
         <div class="info-box">
-          To be a smart decision-maker and evaluator of database choices -- not a database engineer. To understand the landscape well enough to scope out the right database for a project, think through tradeoffs, and intelligently evaluate recommendations from developers or agents. Specifically relevant to working with AI agents that extract, categorize, and store data for cross-source querying.
+          To be a smart decision-maker and evaluator of database choices -- not a database engineer. To understand the landscape well enough to scope out the right database for a project, think through tradeoffs, and intelligently evaluate recommendations from developers or agents.
         </div>
       </div>
 
@@ -270,7 +270,7 @@ body {
               <div class="circle-badge middle">2</div>
               <div class="circle-info">
                 <div class="circle-name">Middle ring -- database categories</div>
-                <div class="circle-sub">One focused deep-dive per type, in order of relevance to your project</div>
+                <div class="circle-sub">One focused deep-dive per type, in order of conceptual dependency</div>
               </div>
               <div class="circle-time">~15 hours</div>
               <div class="chevron">&#9662;</div>
@@ -280,7 +280,7 @@ body {
                 <div class="dlabel">The approach</div>
                 <div class="dtext">For each category: understand the core concept, understand when you'd choose it, understand what you'd be giving up, do one sandbox session to make it real. You don't need to master any of these -- you need to place them on a map and understand the tradeoffs.</div>
                 <div class="dlabel">The order</div>
-                <div class="dtext">Relational first (builds on the core). Then Vector -- moved up because your knowledge base project almost certainly involves a vector layer. Then Document, Key-Value, and Graph.</div>
+                <div class="dtext">Relational first (builds on the core). Then Vector -- moved up because it is increasingly central to modern systems and best understood early. Then Document, Key-Value, and Graph.</div>
                 <div class="dlabel">Marker for completion</div>
                 <div class="dtext">Given a project description, you can name the likely database category and explain why. You can explain what a vector database is doing that a relational database can't.</div>
               </div>
@@ -302,7 +302,7 @@ body {
                 <div class="dlabel">What this is</div>
                 <div class="dtext">Not a phase you complete -- a way of thinking you develop as the inner rings solidify. The ability to receive a recommendation and interrogate it. To ask "why this and not that" and understand the answer. To recognize when a recommendation is well-reasoned vs when it's just the default.</div>
                 <div class="dlabel">Your project as a case study</div>
-                <div class="dtext">The agent plugin you're working with -- extracting from PDFs, URLs, videos, storing stub entries for cross-source querying -- is a real example to apply this thinking to throughout the learning process. What database is it using? Why? What would you change?</div>
+                <div class="dtext">Apply this thinking to any real system you interact with. What database is it using? Why? What would you change? The best practice is a real project you can interrogate throughout the learning process.</div>
                 <div class="dlabel">Marker for completion</div>
                 <div class="dtext">There isn't one. This is the goal, not the endpoint.</div>
               </div>
@@ -407,8 +407,8 @@ body {
               <div class="chevron">&#9662;</div>
             </div>
             <div class="phase-detail">
-              <div class="dlabel">Why second (moved up)</div>
-              <div class="dtext">Your project -- an agent that extracts from PDFs, URLs, and videos for cross-source querying -- almost certainly involves a vector layer. When you query "find everything related to X concept," that's semantic similarity search. Understanding this early is directly relevant.</div>
+              <div class="dlabel">Why second</div>
+              <div class="dtext">Vector databases are increasingly central to modern AI-adjacent systems. Understanding them early -- before Document and Graph -- means you can evaluate architectures that involve semantic search or cross-source querying from the start.</div>
               <div class="dlabel">What to internalize</div>
               <div class="dtext">What an embedding is (a mathematical representation of meaning). What similarity search means vs keyword search. Why this category didn't exist before LLMs. The difference between storing data and storing meaning. Common names: Pinecone, Weaviate, Qdrant, Chroma. Also pgvector -- vector search inside PostgreSQL.</div>
               <div class="dlabel">What done looks like</div>
@@ -432,8 +432,8 @@ body {
             <div class="phase-detail">
               <div class="dlabel">What to internalize</div>
               <div class="dtext">Collections vs tables. Documents vs rows. Why flexible schema matters -- and when it becomes a problem. Embedding vs referencing. Why MongoDB became the most popular NoSQL database.</div>
-              <div class="dlabel">Relevant to your project</div>
-              <div class="dtext">The stub entries your agent creates -- with metadata from different source types (PDF, URL, video) -- are a natural fit for a document store. Each entry might have different fields depending on source type. That's exactly what document databases handle well.</div>
+              <div class="dlabel">A good mental model</div>
+              <div class="dtext">Think about content that varies by type -- a PDF has different metadata than a video, which has different metadata than a URL. A relational schema would require many nullable columns to handle this. A document store lets each record carry exactly the fields it needs.</div>
               <div class="dlabel">What done looks like</div>
               <div class="dtext">You can explain why a content management system or product catalog would use a document store. You understand the tradeoff between flexibility and consistency.</div>
               <div class="dlabel">Resources</div>
@@ -503,7 +503,7 @@ body {
               <div class="dlabel">How you build this</div>
               <div class="dtext">It emerges from the inner rings. As each category becomes familiar, evaluation becomes instinctive. The Evaluating tab gives you the specific questions to ask.</div>
               <div class="dlabel">Your project as practice</div>
-              <div class="dtext">At every stage, apply the thinking to your agent plugin. What is it storing? How is it querying? What database is it using? Is that the right choice? Why or why not?</div>
+              <div class="dtext">At every stage, apply the thinking to a real system you interact with. What is it storing? How is it querying? What database is it likely using? Is that the right choice? Why or why not?</div>
             </div>
           </div>
         </div>
@@ -622,14 +622,14 @@ body {
       </div>
 
       <div class="section">
-        <div class="section-title">Applied to your project</div>
+        <div class="section-title">A worked example -- knowledge base systems</div>
         <div class="info-box">
           <div class="dlabel" style="margin-top:0;">The project</div>
-          <div class="dtext">An agent plugin that extracts data from PDFs, URLs, and videos -- categorizes it, creates stub entries, stores it so you can query across different sources.</div>
+          <div class="dtext">A knowledge base that ingests content from multiple source types (documents, URLs, video transcripts), categorizes it, creates stub entries, and allows querying across sources by concept.</div>
           <div class="dlabel">Likely database layers</div>
-          <div class="dtext"><strong>Document or relational</strong> -- for the stub entries. If metadata varies by source type, document is more natural. If it's consistent, relational works fine.<br><br><strong>Vector</strong> -- for cross-source querying by meaning. "Find everything related to X" requires embedding the content and doing similarity search. Almost certainly in the stack.<br><br><strong>Key-value (maybe)</strong> -- for caching frequent queries or session state.</div>
-          <div class="dlabel">Questions to ask your agent</div>
-          <div class="dtext">What database is storing the stub entries? How is cross-source querying implemented -- keyword or semantic? Is there a vector store involved? If so, which one and why?</div>
+          <div class="dtext"><strong>Document or relational</strong> -- for the stub entries. If metadata varies by source type, document is more natural. If it's consistent, relational works fine.<br><br><strong>Vector</strong> -- for querying by meaning across sources. "Find everything related to X" requires embedding the content and doing similarity search. Almost certainly in the stack.<br><br><strong>Key-value (maybe)</strong> -- for caching frequent queries or session state.</div>
+          <div class="dlabel">Questions to ask</div>
+          <div class="dtext">What database is storing the entries? How is cross-source querying implemented -- keyword or semantic? Is there a vector store involved? If so, which one and why?</div>
         </div>
       </div>
 
@@ -692,7 +692,7 @@ body {
           </a>
           <a href="https://weaviate.io" target="_blank" class="resource-item">
             <div class="resource-name">Weaviate</div>
-            <div class="resource-desc">Vector database -- free cloud tier. Relevant to your project.</div>
+            <div class="resource-desc">Vector database -- free cloud tier.</div>
             <div class="rtag sandbox">sandbox</div>
           </a>
           <a href="https://qdrant.tech" target="_blank" class="resource-item">
