@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>database learning path -- learning .log</title>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/gif" sizes="48x48" href="favicon-48.gif">
+<link rel="icon" type="image/gif" sizes="32x32" href="favicon-32.gif">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #4a6a8a;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.05) 1px, rgba(0,0,0,0.05) 2px),
+    repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.05) 1px, rgba(0,0,0,0.05) 2px);
+  background-size: 8px 8px;
+  min-height: 100vh;
+  font-family: 'DM Mono', monospace;
+}
+.menubar {
+  background: #e8e8e8; border-bottom: 1px solid #999; padding: 3px 14px;
+  font-size: 12px; font-weight: bold; display: flex; gap: 18px; align-items: center;
+  position: sticky; top: 0; z-index: 100;
+}
+.menubar span { color: #000; cursor: default; user-select: none; }
+.menubar .clock { margin-left: auto; font-size: 11px; font-weight: normal; }
+.apple-menu { position: relative; display: inline-block; }
+.apple-menu .apple { font-size: 14px; cursor: pointer; user-select: none; padding: 0 4px; }
+.apple-dropdown {
+  display: none; position: absolute; top: 100%; left: 0;
+  background: #e8e8e8; border: 1.5px solid #888; border-top: none;
+  box-shadow: 2px 2px 0 #aaa; min-width: 200px; z-index: 200; font-weight: normal;
+}
+.apple-menu:hover .apple-dropdown { display: block; }
+.apple-dropdown a, .apple-dropdown div {
+  display: block; padding: 4px 16px; font-size: 12px; color: #000;
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+.apple-dropdown a:hover, .apple-dropdown div:hover { background: #4a6a8a; color: #fff; }
+.apple-divider { border: none; border-top: 1px solid #aaa; margin: 2px 0; padding: 0; }
+.apple-divider:hover { background: none !important; }
+.desktop { padding: 20px 16px 40px; }
+.window {
+  background: #d4d0c8; border-radius: 8px; border: 2px solid #888;
+  box-shadow: 4px 4px 0 #1a2a3a; overflow: hidden; max-width: 860px;
+  margin: 0 auto; animation: fadeUp 0.4s ease both;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.titlebar {
+  background: linear-gradient(180deg, #f0f0f0 0%, #c0bdb5 100%);
+  border-bottom: 1px solid #888; padding: 5px 10px;
+  display: flex; align-items: center; gap: 8px; user-select: none;
+}
+.close-box { width: 13px; height: 13px; border: 1.5px solid #555; background: #d4d0c8; flex-shrink: 0; }
+.title-text { font-size: 12px; font-weight: bold; color: #000; flex: 1; text-align: center; letter-spacing: 0.04em; }
+.tab-nav {
+  background: #bab7b0; border-bottom: 2px solid #888;
+  display: flex; padding: 0 12px; gap: 3px; align-items: flex-end; overflow-x: auto;
+}
+.tab {
+  background: #c8c5be; border: 1.5px solid #888; border-bottom: none;
+  border-radius: 4px 4px 0 0; padding: 4px 14px 5px; font-size: 11px; font-weight: bold;
+  font-family: 'DM Mono', monospace; color: #333; cursor: pointer; margin-bottom: -2px;
+  white-space: nowrap; user-select: none; transition: background 0.1s;
+  text-decoration: none; display: inline-block;
+}
+.tab:hover { background: #d0cdc6; }
+.tab.active { background: #eae7e0; border-bottom: 2px solid #eae7e0; color: #000; z-index: 1; }
+.content { background: #eae7e0; padding: 16px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.section { margin-bottom: 24px; }
+.section-title {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.22em; color: #888;
+  margin-bottom: 10px; padding-bottom: 4px; border-bottom: 1px solid #c0bdb5;
+}
+.circles { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.circle-row {
+  background: #f0ede6; border: 1.5px solid #888; border-radius: 6px;
+  box-shadow: 2px 2px 0 #aaa; overflow: hidden; cursor: pointer; transition: box-shadow 0.1s;
+}
+.circle-row:hover { box-shadow: 3px 3px 0 #888; }
+.circle-header { display: flex; align-items: center; gap: 12px; padding: 10px 14px; user-select: none; }
+.circle-badge {
+  width: 32px; height: 32px; border-radius: 50%; border: 2px solid #888;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: bold; flex-shrink: 0;
+}
+.circle-badge.core   { background: #4a6a8a; border-color: #2a4a6a; color: #fff; }
+.circle-badge.middle { background: #6a8a6a; border-color: #4a6a4a; color: #fff; }
+.circle-badge.outer  { background: #8a6a4a; border-color: #6a4a2a; color: #fff; }
+.circle-badge.hub    { background: #7a6a8a; border-color: #5a4a6a; color: #fff; }
+.circle-info { flex: 1; }
+.circle-name { font-size: 12px; font-weight: bold; color: #000; margin-bottom: 2px; }
+.circle-sub  { font-size: 10px; color: #777; }
+.circle-time { font-size: 10px; color: #aaa; white-space: nowrap; }
+.chevron { font-size: 9px; color: #888; transition: transform 0.2s; margin-left: 4px; }
+.circle-row.open .chevron, .phase-card.open .chevron, .question-card.open .chevron { transform: rotate(180deg); }
+.circle-detail {
+  display: none; padding: 0 14px 14px; border-top: 1px solid #d0cdc6;
+  background: #e8e5de; animation: slideDown 0.15s ease;
+}
+@keyframes slideDown { from { opacity:0; transform:translateY(-3px); } to { opacity:1; transform:translateY(0); } }
+.circle-row.open .circle-detail { display: block; }
+.phase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.phase-card {
+  background: #f0ede6; border: 1.5px solid #888; border-radius: 6px;
+  box-shadow: 2px 2px 0 #aaa; overflow: hidden; cursor: pointer;
+}
+.phase-card:hover { box-shadow: 3px 3px 0 #888; }
+.phase-header {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  background: linear-gradient(180deg, #dddad2 0%, #c8c5be 100%);
+  border-bottom: 1px solid #999; user-select: none;
+}
+.phase-icon {
+  width: 20px; height: 20px; border-radius: 3px; border: 1.5px solid #666;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: bold; flex-shrink: 0;
+}
+.phase-icon.sql      { background: #dde8f0; border-color: #4a6a8a; color: #4a6a8a; }
+.phase-icon.rel      { background: #dde8f0; border-color: #4a6a8a; color: #4a6a8a; }
+.phase-icon.vec      { background: #f0e0f0; border-color: #8a4a8a; color: #8a4a8a; }
+.phase-icon.doc      { background: #ddf0e0; border-color: #4a8a5a; color: #4a8a5a; }
+.phase-icon.kv       { background: #f0ede0; border-color: #8a7a4a; color: #8a7a4a; }
+.phase-icon.graph    { background: #ede0f0; border-color: #7a4a8a; color: #7a4a8a; }
+.phase-icon.decision { background: #e0f0e8; border-color: #4a8a6a; color: #4a8a6a; }
+.phase-name { font-size: 12px; font-weight: bold; color: #000; flex: 1; }
+.phase-est  { font-size: 10px; color: #777; white-space: nowrap; }
+.phase-detail {
+  display: none; padding: 10px 12px 12px; font-size: 11px; line-height: 1.75;
+  color: #1a1a1a; animation: slideDown 0.15s ease;
+}
+.phase-card.open .phase-detail { display: block; }
+.dlabel {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.18em; color: #888;
+  margin-top: 10px; margin-bottom: 3px;
+}
+.dlabel:first-child { margin-top: 0; }
+.dtext { font-size: 11px; color: #222; line-height: 1.75; }
+.dcode {
+  display: block; background: #1a1a1a; color: #c8e0a8; border: 1px solid #444;
+  border-radius: 3px; padding: 7px 10px; font-size: 10.5px;
+  font-family: 'DM Mono', monospace; line-height: 1.65; margin-top: 4px;
+}
+.tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.tag { font-size: 10px; padding: 2px 8px; border-radius: 3px; border: 1px solid #aaa; background: #e0ddd6; color: #444; }
+.tag.hl { background: #4a6a8a; border-color: #2a4a6a; color: #fff; }
+.resource-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+.resource-item {
+  display: flex; align-items: baseline; gap: 10px; padding: 8px 12px;
+  background: #f0ede6; border: 1.5px solid #c8c5be; border-radius: 4px;
+  text-decoration: none; transition: border-color 0.1s, background 0.1s;
+}
+.resource-item:hover { border-color: #4a6a8a; background: #e8e5de; }
+.resource-name { font-size: 11px; font-weight: bold; color: #000; flex-shrink: 0; }
+.resource-desc { font-size: 10px; color: #777; flex: 1; }
+.rtag {
+  font-size: 9px; padding: 1px 6px; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
+}
+.rtag.free    { background: #ddf0e0; color: #4a6a4a; border: 1px solid #aacaaa; }
+.rtag.fun     { background: #f0ede0; color: #6a5a2a; border: 1px solid #cac0aa; }
+.rtag.reading { background: #dde8f0; color: #2a4a6a; border: 1px solid #aac0d0; }
+.rtag.sandbox { background: #ede0f0; color: #5a3a6a; border: 1px solid #c0aad0; }
+.question-list { display: flex; flex-direction: column; gap: 6px; }
+.question-card {
+  background: #f0ede6; border: 1.5px solid #c8c5be; border-left: 4px solid #4a6a8a;
+  border-radius: 4px; padding: 10px 12px; cursor: pointer; transition: border-color 0.1s;
+}
+.question-card:hover { border-left-color: #2a4a6a; }
+.question-card.open  { border-left-color: #2a4a6a; }
+.question-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.question-text { font-size: 12px; font-weight: bold; color: #000; line-height: 1.4; }
+.question-detail {
+  display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #d0cdc6;
+  font-size: 11px; color: #333; line-height: 1.75; animation: slideDown 0.15s ease;
+}
+.question-card.open .question-detail { display: block; }
+.info-box {
+  background: #f0ede6; border: 1.5px solid #c8c5be; border-radius: 6px;
+  padding: 14px 16px; font-size: 11px; line-height: 1.85; color: #222;
+  box-shadow: 2px 2px 0 #aaa; margin-bottom: 16px;
+}
+.win-footer {
+  background: linear-gradient(180deg, #c8c5be 0%, #b8b5ae 100%);
+  border-top: 1px solid #888; padding: 4px 12px; font-size: 10px; color: #555;
+  display: flex; justify-content: space-between; user-select: none;
+}
+</style>
+</head>
+<body>
+
+<div class="menubar">
+  <div class="apple-menu">
+    <span class="apple">&#63743;</span>
+    <div class="apple-dropdown">
+      <a href="index.html">Return to learning .log</a>
+      <hr class="apple-divider">
+      <a href="databases.html">Databases</a>
+      <a href="bash-skills.html">Bash skills</a>
+    </div>
+  </div>
+  <span>File</span><span>Edit</span><span>View</span><span>Special</span>
+  <span class="clock" id="clock">12:00 PM</span>
+</div>
+
+<div class="desktop">
+<div class="window">
+
+  <div class="titlebar">
+    <span class="close-box"></span>
+    <span class="title-text">database learning path</span>
+  </div>
+
+  <div class="tab-nav">
+    <div class="tab active" onclick="switchTab('overview',this)">Overview</div>
+    <div class="tab" onclick="switchTab('path',this)">The path</div>
+    <div class="tab" onclick="switchTab('evaluate',this)">Evaluating</div>
+    <div class="tab" onclick="switchTab('resources',this)">Resources</div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="content">
+
+      <div class="section">
+        <div class="section-title">The goal</div>
+        <div class="info-box">
+          To be a smart decision-maker and evaluator of database choices -- not a database engineer. To understand the landscape well enough to scope out the right database for a project, think through tradeoffs, and intelligently evaluate recommendations from developers or agents. Specifically relevant to working with AI agents that extract, categorize, and store data for cross-source querying.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">The concentric circle model</div>
+        <p style="font-size:11px;color:#888;margin-bottom:12px;">Three rings of knowledge, built outward. Click each to expand.</p>
+        <div class="circles">
+
+          <div class="circle-row" onclick="toggleCard(this)">
+            <div class="circle-header">
+              <div class="circle-badge core">1</div>
+              <div class="circle-info">
+                <div class="circle-name">Core -- SQL as a mental model</div>
+                <div class="circle-sub">The vocabulary everything else is built on or compared to</div>
+              </div>
+              <div class="circle-time">~10 hours</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="circle-detail">
+              <div style="padding-top:12px;">
+                <div class="dlabel">What this is</div>
+                <div class="dtext">SQL is the baseline language of databases. Even if you never write production SQL, understanding how it thinks -- tables, rows, relationships, joins -- gives you the vocabulary to understand every other database type by comparison. NoSQL is defined by what it isn't. Vector databases are explained relative to what SQL can't do well. It all starts here.</div>
+                <div class="dlabel">What you're building</div>
+                <div class="dtext">Conceptual fluency. Enough SQL to read and reason about a query, not to write production code. The ability to look at a data structure and understand how it would be represented relationally.</div>
+                <div class="dlabel">What you're not doing</div>
+                <div class="dtext">Stored procedures. Query optimization. Database administration. Indexing strategies. That's database engineering territory -- not your goal.</div>
+                <div class="dlabel">Marker for completion</div>
+                <div class="dtext">You can read a SQL query and explain in plain language what it's asking. You can describe the difference between a primary key and a foreign key without looking it up.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="circle-row" onclick="toggleCard(this)">
+            <div class="circle-header">
+              <div class="circle-badge middle">2</div>
+              <div class="circle-info">
+                <div class="circle-name">Middle ring -- database categories</div>
+                <div class="circle-sub">One focused deep-dive per type, in order of relevance to your project</div>
+              </div>
+              <div class="circle-time">~15 hours</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="circle-detail">
+              <div style="padding-top:12px;">
+                <div class="dlabel">The approach</div>
+                <div class="dtext">For each category: understand the core concept, understand when you'd choose it, understand what you'd be giving up, do one sandbox session to make it real. You don't need to master any of these -- you need to place them on a map and understand the tradeoffs.</div>
+                <div class="dlabel">The order</div>
+                <div class="dtext">Relational first (builds on the core). Then Vector -- moved up because your knowledge base project almost certainly involves a vector layer. Then Document, Key-Value, and Graph.</div>
+                <div class="dlabel">Marker for completion</div>
+                <div class="dtext">Given a project description, you can name the likely database category and explain why. You can explain what a vector database is doing that a relational database can't.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="circle-row" onclick="toggleCard(this)">
+            <div class="circle-header">
+              <div class="circle-badge outer">3</div>
+              <div class="circle-info">
+                <div class="circle-name">Outer ring -- decision making</div>
+                <div class="circle-sub">Evaluating recommendations, asking the right questions, thinking through tradeoffs</div>
+              </div>
+              <div class="circle-time">ongoing</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="circle-detail">
+              <div style="padding-top:12px;">
+                <div class="dlabel">What this is</div>
+                <div class="dtext">Not a phase you complete -- a way of thinking you develop as the inner rings solidify. The ability to receive a recommendation and interrogate it. To ask "why this and not that" and understand the answer. To recognize when a recommendation is well-reasoned vs when it's just the default.</div>
+                <div class="dlabel">Your project as a case study</div>
+                <div class="dtext">The agent plugin you're working with -- extracting from PDFs, URLs, videos, storing stub entries for cross-source querying -- is a real example to apply this thinking to throughout the learning process. What database is it using? Why? What would you change?</div>
+                <div class="dlabel">Marker for completion</div>
+                <div class="dtext">There isn't one. This is the goal, not the endpoint.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="circle-row" onclick="toggleCard(this)">
+            <div class="circle-header">
+              <div class="circle-badge hub">+</div>
+              <div class="circle-info">
+                <div class="circle-name">Resource hub</div>
+                <div class="circle-sub">All tools, sandboxes, and reading -- organized by when you need them</div>
+              </div>
+              <div class="circle-time">see Resources tab</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="circle-detail">
+              <div style="padding-top:12px;">
+                <div class="dtext">Everything is in the Resources tab -- organized by which ring it belongs to. Interactive tools, sandboxes, reading, and reference links.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">A note on time</div>
+        <div class="info-box" style="color:#555;">
+          This isn't a sprint. A couple of hours a week, no deadline, no stopping until you understand it. The concentric circle model means you're always building -- finishing the core makes the middle ring easier, and the middle ring makes evaluation instinctive. There's no wrong place to pause.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- THE PATH -->
+  <div class="tab-panel" id="tab-path">
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">The phases in order. Click each to expand goals, approach, and what done looks like.</p>
+
+      <div class="section">
+        <div class="section-title">Core -- SQL as a mental model</div>
+        <div class="phase-grid">
+          <div class="phase-card" onclick="toggleCard(this)">
+            <div class="phase-header">
+              <div class="phase-icon sql">S</div>
+              <div class="phase-name">SQL concepts &amp; vocabulary</div>
+              <div class="phase-est">~5-10 hrs</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="phase-detail">
+              <div class="dlabel">What to internalize</div>
+              <div class="dtext">Tables, rows, columns. Primary and foreign keys. SELECT, WHERE, ORDER BY. JOINs -- what they are and why they exist. GROUP BY and aggregates. Schema as a concept. ACID properties and why transactions exist.</div>
+              <div class="dlabel">How</div>
+              <div class="dtext">Read first, then do. Start with the Databases reference page here to ground the vocabulary. Then go interactive -- SQL Murder Mystery is the recommended first hands-on experience. Self-directed, low pressure, builds real intuition.</div>
+              <div class="dlabel">What done looks like</div>
+              <div class="dtext">You can read a SQL query and explain in plain language what it's asking. You understand why JOINs exist. You can describe primary vs foreign key without looking it up.</div>
+              <div class="dlabel">Start here</div>
+              <div class="tag-row">
+                <span class="tag hl">SQL Murder Mystery</span>
+                <span class="tag">Databases page here</span>
+                <span class="tag">Select Star SQL</span>
+                <span class="tag">SQLBolt</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Middle ring -- database categories in order</div>
+        <div class="phase-grid">
+
+          <div class="phase-card" onclick="toggleCard(this)">
+            <div class="phase-header">
+              <div class="phase-icon rel">R</div>
+              <div class="phase-name">1. Relational -- PostgreSQL</div>
+              <div class="phase-est">~3 hrs</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="phase-detail">
+              <div class="dlabel">Why first</div>
+              <div class="dtext">Everything in the middle ring is understood relative to relational. Document stores are "relational but flexible." Vector databases are "relational but for meaning not structure." You need the baseline.</div>
+              <div class="dlabel">What to internalize</div>
+              <div class="dtext">What PostgreSQL is and why it's the default choice. How schemas enforce structure. What a JOIN does at a data level. When relational is right -- and when it isn't.</div>
+              <div class="dlabel">What done looks like</div>
+              <div class="dtext">Given a project with structured, consistent data and clear relationships, you'd recommend relational and explain why. You can explain what a schema constraint is and why it matters.</div>
+              <div class="dlabel">Resources</div>
+              <div class="tag-row">
+                <span class="tag hl">Applications tab -- Databases page</span>
+                <span class="tag">PostgreSQL docs intro</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="phase-card" onclick="toggleCard(this)">
+            <div class="phase-header">
+              <div class="phase-icon vec">V</div>
+              <div class="phase-name">2. Vector databases</div>
+              <div class="phase-est">~3 hrs</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="phase-detail">
+              <div class="dlabel">Why second (moved up)</div>
+              <div class="dtext">Your project -- an agent that extracts from PDFs, URLs, and videos for cross-source querying -- almost certainly involves a vector layer. When you query "find everything related to X concept," that's semantic similarity search. Understanding this early is directly relevant.</div>
+              <div class="dlabel">What to internalize</div>
+              <div class="dtext">What an embedding is (a mathematical representation of meaning). What similarity search means vs keyword search. Why this category didn't exist before LLMs. The difference between storing data and storing meaning. Common names: Pinecone, Weaviate, Qdrant, Chroma. Also pgvector -- vector search inside PostgreSQL.</div>
+              <div class="dlabel">What done looks like</div>
+              <div class="dtext">You can explain why a knowledge base needs a vector layer. You understand the difference between "find rows where tag = AI" and "find everything conceptually related to AI."</div>
+              <div class="dlabel">Resources</div>
+              <div class="tag-row">
+                <span class="tag hl">Weaviate free tier</span>
+                <span class="tag hl">Qdrant free tier</span>
+                <span class="tag">Coursera -- Vector DB explained</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="phase-card" onclick="toggleCard(this)">
+            <div class="phase-header">
+              <div class="phase-icon doc">D</div>
+              <div class="phase-name">3. Document -- MongoDB</div>
+              <div class="phase-est">~3 hrs</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="phase-detail">
+              <div class="dlabel">What to internalize</div>
+              <div class="dtext">Collections vs tables. Documents vs rows. Why flexible schema matters -- and when it becomes a problem. Embedding vs referencing. Why MongoDB became the most popular NoSQL database.</div>
+              <div class="dlabel">Relevant to your project</div>
+              <div class="dtext">The stub entries your agent creates -- with metadata from different source types (PDF, URL, video) -- are a natural fit for a document store. Each entry might have different fields depending on source type. That's exactly what document databases handle well.</div>
+              <div class="dlabel">What done looks like</div>
+              <div class="dtext">You can explain why a content management system or product catalog would use a document store. You understand the tradeoff between flexibility and consistency.</div>
+              <div class="dlabel">Resources</div>
+              <div class="tag-row">
+                <span class="tag hl">MongoDB Atlas free tier</span>
+                <span class="tag">MongoDB docs intro</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="phase-card" onclick="toggleCard(this)">
+            <div class="phase-header">
+              <div class="phase-icon kv">K</div>
+              <div class="phase-name">4. Key-value -- Redis</div>
+              <div class="phase-est">~2 hrs</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="phase-detail">
+              <div class="dlabel">What to internalize</div>
+              <div class="dtext">The dictionary mental model. Why in-memory is fast. TTLs and expiration. Why Redis is almost always used alongside another database, not instead of one. Common use cases: caching, sessions, rate limiting, queues.</div>
+              <div class="dlabel">What done looks like</div>
+              <div class="dtext">If someone recommends adding Redis to a project, you understand what problem it's solving. You can explain the caching pattern without looking it up.</div>
+              <div class="dlabel">Resources</div>
+              <div class="tag-row">
+                <span class="tag hl">Redis online editor</span>
+                <span class="tag">Redis docs intro</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="phase-card" onclick="toggleCard(this)">
+            <div class="phase-header">
+              <div class="phase-icon graph">G</div>
+              <div class="phase-name">5. Graph -- Neo4j</div>
+              <div class="phase-est">~3 hrs</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="phase-detail">
+              <div class="dlabel">What to internalize</div>
+              <div class="dtext">Nodes and edges as the primary data model. Traversal vs JOIN -- why this is a fundamentally different operation. When "how things are connected" matters more than "what things contain." Cypher query language at a surface level.</div>
+              <div class="dlabel">What done looks like</div>
+              <div class="dtext">You can describe a use case where graph is clearly the right choice and explain why relational would struggle with the same problem.</div>
+              <div class="dlabel">Resources</div>
+              <div class="tag-row">
+                <span class="tag hl">Neo4j browser sandbox</span>
+                <span class="tag">Neo4j -- graph vs relational</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Outer ring -- decision making</div>
+        <div class="phase-grid">
+          <div class="phase-card" onclick="toggleCard(this)">
+            <div class="phase-header">
+              <div class="phase-icon decision">?</div>
+              <div class="phase-name">Evaluating recommendations</div>
+              <div class="phase-est">ongoing</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="phase-detail">
+              <div class="dlabel">What this is</div>
+              <div class="dtext">The ability to receive a database recommendation and ask the right questions. To understand whether it's well-reasoned or just the default. To think through tradeoffs without needing to implement them.</div>
+              <div class="dlabel">How you build this</div>
+              <div class="dtext">It emerges from the inner rings. As each category becomes familiar, evaluation becomes instinctive. The Evaluating tab gives you the specific questions to ask.</div>
+              <div class="dlabel">Your project as practice</div>
+              <div class="dtext">At every stage, apply the thinking to your agent plugin. What is it storing? How is it querying? What database is it using? Is that the right choice? Why or why not?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EVALUATING -->
+  <div class="tab-panel" id="tab-evaluate">
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">Questions to ask when evaluating a database recommendation. Click to expand the reasoning.</p>
+
+      <div class="section">
+        <div class="section-title">Questions about the data</div>
+        <div class="question-list">
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">What does the data actually look like -- and does it have a consistent structure?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              If every record looks the same (same fields, same types), relational is probably right. If records vary significantly -- different fields per item, nested structures -- a document store may be better. This is the first filter.
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">Are the relationships between data points as important as the data itself?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              If you're constantly asking "what is connected to what, and through how many steps," that's a graph problem. If your relationships are simple (this order belongs to this user), relational handles it fine. The complexity of relationship traversal is the key question.
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">Is the querying keyword-based or meaning-based?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              "Find all records tagged 'machine learning'" is keyword-based -- any database handles this. "Find everything conceptually related to machine learning" is meaning-based -- that requires a vector layer. If cross-source querying needs to surface conceptually related content, vector is involved.
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">How does the data change over time -- and how often?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              Relational databases handle frequent updates to individual records well. Time-series databases are for append-only, time-stamped data queried by range. Columnar databases are optimized for reads across many rows, not frequent writes. The write pattern shapes the choice.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Questions about the recommendation</div>
+        <div class="question-list">
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">Why this database specifically -- not just this category?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              "We need a document database" is a category choice. "We're using MongoDB" is a product choice. They're different decisions. Ask why MongoDB over Firestore, or PostgreSQL over MySQL. The answer reveals whether the recommendation is well-reasoned or just habitual.
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">What are we giving up with this choice?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              Every database choice is a tradeoff. Document stores sacrifice consistency for flexibility. Key-value stores sacrifice queryability for speed. A good recommendation comes with an honest account of what you're trading. If someone can't articulate the tradeoff, the recommendation isn't well-reasoned.
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">Is this the right database for now, or for where we're going?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              SQLite is perfect for a local prototype. It doesn't scale to a million users. PostgreSQL scales much further. Ask whether the recommendation accounts for scale -- and whether that scale is actually realistic for this project.
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">Is this a single-database recommendation or a layered one?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              Most real systems use more than one database type. PostgreSQL for structured data, Redis for caching, a vector store for semantic search. A recommendation that tries to do everything with one database may be oversimplified. Ask whether the architecture accounts for different access patterns having different storage needs.
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleCard(this)">
+            <div class="question-top">
+              <div class="question-text">Is this the default choice, or the right choice?</div>
+              <div class="chevron">&#9662;</div>
+            </div>
+            <div class="question-detail">
+              Developers and agents have defaults -- technologies they know, ecosystems they're comfortable in. Ask what alternatives were considered and why they were ruled out. The answer tells you a lot about the depth of the reasoning.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Applied to your project</div>
+        <div class="info-box">
+          <div class="dlabel" style="margin-top:0;">The project</div>
+          <div class="dtext">An agent plugin that extracts data from PDFs, URLs, and videos -- categorizes it, creates stub entries, stores it so you can query across different sources.</div>
+          <div class="dlabel">Likely database layers</div>
+          <div class="dtext"><strong>Document or relational</strong> -- for the stub entries. If metadata varies by source type, document is more natural. If it's consistent, relational works fine.<br><br><strong>Vector</strong> -- for cross-source querying by meaning. "Find everything related to X" requires embedding the content and doing similarity search. Almost certainly in the stack.<br><br><strong>Key-value (maybe)</strong> -- for caching frequent queries or session state.</div>
+          <div class="dlabel">Questions to ask your agent</div>
+          <div class="dtext">What database is storing the stub entries? How is cross-source querying implemented -- keyword or semantic? Is there a vector store involved? If so, which one and why?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="tab-panel" id="tab-resources">
+    <div class="content">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">All resources organized by when you need them. Opens in a new tab.</p>
+
+      <div class="section">
+        <div class="section-title">Core -- SQL concepts</div>
+        <div class="resource-list">
+          <a href="https://mystery.knightlab.com" target="_blank" class="resource-item">
+            <div class="resource-name">SQL Murder Mystery</div>
+            <div class="resource-desc">Solve a murder using SQL. Best first hands-on experience.</div>
+            <div class="rtag fun">fun</div>
+          </a>
+          <a href="https://selectstarsql.com" target="_blank" class="resource-item">
+            <div class="resource-name">Select Star SQL</div>
+            <div class="resource-desc">Interactive SQL tutorial. Concept-first, real data.</div>
+            <div class="rtag free">free</div>
+          </a>
+          <a href="https://sqlbolt.com" target="_blank" class="resource-item">
+            <div class="resource-name">SQLBolt</div>
+            <div class="resource-desc">18 interactive lessons in browser. Quick and structured.</div>
+            <div class="rtag free">free</div>
+          </a>
+          <a href="https://www.sqlnoir.com" target="_blank" class="resource-item">
+            <div class="resource-name">SQL Noir</div>
+            <div class="resource-desc">Detective game -- solve cases with SQL queries.</div>
+            <div class="rtag fun">fun</div>
+          </a>
+          <a href="https://lost-at-sql.therobinlord.com" target="_blank" class="resource-item">
+            <div class="resource-name">Lost at SQL</div>
+            <div class="resource-desc">Game-based SQL learning.</div>
+            <div class="rtag fun">fun</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Middle ring -- sandboxes</div>
+        <div class="resource-list">
+          <a href="https://neo4j.com/sandbox" target="_blank" class="resource-item">
+            <div class="resource-name">Neo4j Sandbox</div>
+            <div class="resource-desc">Graph database -- browser-based, no install required.</div>
+            <div class="rtag sandbox">sandbox</div>
+          </a>
+          <a href="https://www.mongodb.com/atlas" target="_blank" class="resource-item">
+            <div class="resource-name">MongoDB Atlas</div>
+            <div class="resource-desc">Document database -- free tier, cloud-hosted.</div>
+            <div class="rtag sandbox">sandbox</div>
+          </a>
+          <a href="https://redis.io/docs/getting-started" target="_blank" class="resource-item">
+            <div class="resource-name">Redis Online Editor</div>
+            <div class="resource-desc">Key-value -- try Redis commands in browser.</div>
+            <div class="rtag sandbox">sandbox</div>
+          </a>
+          <a href="https://weaviate.io" target="_blank" class="resource-item">
+            <div class="resource-name">Weaviate</div>
+            <div class="resource-desc">Vector database -- free cloud tier. Relevant to your project.</div>
+            <div class="rtag sandbox">sandbox</div>
+          </a>
+          <a href="https://qdrant.tech" target="_blank" class="resource-item">
+            <div class="resource-name">Qdrant</div>
+            <div class="resource-desc">Vector database -- free cloud tier. Alternative to Weaviate.</div>
+            <div class="rtag sandbox">sandbox</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Reading -- comparisons &amp; concepts</div>
+        <div class="resource-list">
+          <a href="https://rivery.io/data-learning-center/database-types-guide" target="_blank" class="resource-item">
+            <div class="resource-name">Rivery -- Database types guide</div>
+            <div class="resource-desc">Comprehensive comparison tables. SQL vs NoSQL vs Graph.</div>
+            <div class="rtag reading">reading</div>
+          </a>
+          <a href="https://www.ibm.com/think/topics/sql-vs-nosql" target="_blank" class="resource-item">
+            <div class="resource-name">IBM -- SQL vs NoSQL</div>
+            <div class="resource-desc">Vendor-neutral comparison. Clear and well-structured.</div>
+            <div class="rtag reading">reading</div>
+          </a>
+          <a href="https://neo4j.com/blog/graph-database/graph-database-vs-relational-database" target="_blank" class="resource-item">
+            <div class="resource-name">Neo4j -- Graph vs Relational</div>
+            <div class="resource-desc">When graph is the right choice and why.</div>
+            <div class="rtag reading">reading</div>
+          </a>
+          <a href="https://www.coursera.org/articles/vector-database" target="_blank" class="resource-item">
+            <div class="resource-name">Coursera -- Vector databases explained</div>
+            <div class="resource-desc">Clear intro to embeddings and similarity search.</div>
+            <div class="rtag reading">reading</div>
+          </a>
+          <a href="https://db-engines.com/en/ranking" target="_blank" class="resource-item">
+            <div class="resource-name">DB-Engines Ranking</div>
+            <div class="resource-desc">Current popularity ranking of all database engines.</div>
+            <div class="rtag reading">reading</div>
+          </a>
+          <a href="https://linkedin.github.io/school-of-sre/level101/databases_nosql/intro" target="_blank" class="resource-item">
+            <div class="resource-name">LinkedIn School of SRE -- NoSQL</div>
+            <div class="resource-desc">LinkedIn's internal SRE training, released free. Concept-first.</div>
+            <div class="rtag reading">reading</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="win-footer">
+    <span>enid &amp; anazial</span>
+    <span>updated June 2026</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+function toggleCard(el) { el.classList.toggle('open'); }
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+function tick() {
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  document.getElementById('clock').textContent = h + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+}
+tick(); setInterval(tick, 10000);
+</script>
+</body>
+</html>
