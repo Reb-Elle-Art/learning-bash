@@ -150,7 +150,9 @@ body {
   font-family: 'DM Mono', monospace; line-height: 1.65; margin-top: 4px;
 }
 .tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-.tag { font-size: 10px; padding: 2px 8px; border-radius: 3px; border: 1px solid #aaa; background: #e0ddd6; color: #444; }
+.tag { font-size: 10px; padding: 2px 8px; border-radius: 3px; border: 1px solid #aaa; background: #e0ddd6; color: #444; text-decoration: none; display: inline-block; }
+a.tag:hover { border-color: #4a6a8a; background: #d0d8e0; }
+a.tag.hl:hover { background: #2a4a6a; }
 .tag.hl { background: #4a6a8a; border-color: #2a4a6a; color: #fff; }
 .resource-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
 .resource-item {
@@ -347,8 +349,8 @@ body {
       <div class="section">
         <div class="section-title">Core -- SQL as a mental model</div>
         <div class="phase-grid">
-          <div class="phase-card" onclick="toggleCard(this)">
-            <div class="phase-header">
+          <div class="phase-card">
+            <div class="phase-header" onclick="toggleCard(this.closest('.phase-card'))">
               <div class="phase-icon sql">S</div>
               <div class="phase-name">SQL concepts &amp; vocabulary</div>
               <div class="phase-est">~5-10 hrs</div>
@@ -359,14 +361,17 @@ body {
               <div class="dtext">Tables, rows, columns. Primary and foreign keys. SELECT, WHERE, ORDER BY. JOINs -- what they are and why they exist. GROUP BY and aggregates. Schema as a concept. ACID properties and why transactions exist.</div>
               <div class="dlabel">How</div>
               <div class="dtext">Read first, then do. Start with the Databases reference page here to ground the vocabulary. Then go interactive -- SQL Murder Mystery is the recommended first hands-on experience. Self-directed, low pressure, builds real intuition.</div>
+              <div class="dlabel">Deep dive</div>
+              <div class="dtext">Work through at least one gamified resource end to end. The goal is to get SQL syntax into your fingers -- not to memorize it, but to feel comfortable reading it. Pay particular attention to JOINs: understanding why they exist (to avoid duplicating data across tables) is the conceptual key to the whole relational model.</div>
               <div class="dlabel">What done looks like</div>
               <div class="dtext">You can read a SQL query and explain in plain language what it's asking. You understand why JOINs exist. You can describe primary vs foreign key without looking it up.</div>
               <div class="dlabel">Start here</div>
               <div class="tag-row">
-                <span class="tag hl">SQL Murder Mystery</span>
-                <span class="tag">Databases page here</span>
-                <span class="tag">Select Star SQL</span>
-                <span class="tag">SQLBolt</span>
+                <a class="tag hl" href="https://mystery.knightlab.com" target="_blank" onclick="event.stopPropagation()">SQL Murder Mystery</a>
+                <a class="tag hl" href="databases.html" target="_blank" onclick="event.stopPropagation()">Databases page</a>
+                <a class="tag" href="https://selectstarsql.com" target="_blank" onclick="event.stopPropagation()">Select Star SQL</a>
+                <a class="tag" href="https://sqlbolt.com" target="_blank" onclick="event.stopPropagation()">SQLBolt</a>
+                <a class="tag" href="https://www.sqlnoir.com" target="_blank" onclick="event.stopPropagation()">SQL Noir</a>
               </div>
             </div>
           </div>
@@ -377,8 +382,8 @@ body {
         <div class="section-title">Middle ring -- database categories in order</div>
         <div class="phase-grid">
 
-          <div class="phase-card" onclick="toggleCard(this)">
-            <div class="phase-header">
+          <div class="phase-card">
+            <div class="phase-header" onclick="toggleCard(this.closest('.phase-card'))">
               <div class="phase-icon rel">R</div>
               <div class="phase-name">1. Relational -- PostgreSQL</div>
               <div class="phase-est">~3 hrs</div>
@@ -388,19 +393,24 @@ body {
               <div class="dlabel">Why first</div>
               <div class="dtext">Everything in the middle ring is understood relative to relational. Document stores are "relational but flexible." Vector databases are "relational but for meaning not structure." You need the baseline.</div>
               <div class="dlabel">What to internalize</div>
-              <div class="dtext">What PostgreSQL is and why it's the default choice. How schemas enforce structure. What a JOIN does at a data level. When relational is right -- and when it isn't.</div>
+              <div class="dtext">What PostgreSQL is and why it is the default choice for most new projects. How schemas enforce structure and why that matters. What a JOIN does at a data level -- not just the syntax, but the concept of linking normalized data. When relational is the right choice and when it starts to strain.</div>
+              <div class="dlabel">Deep dive</div>
+              <div class="dtext">Read the Applications tab on the Databases page -- specifically the Instagram and Airbnb examples side by side. They illustrate exactly when relational is the right call (Instagram -- consistent structure, clear relationships) vs when it starts to strain (Airbnb -- every listing is different). Then look at the Brand Name Directory to understand where PostgreSQL sits relative to MySQL, SQLite, and the enterprise options.</div>
+              <div class="dlabel">Sandbox</div>
+              <div class="dtext">If you want hands-on: SQLBolt has exercises that use a real relational schema. Run through the JOIN exercises specifically -- they are the conceptual core of this phase.</div>
               <div class="dlabel">What done looks like</div>
-              <div class="dtext">Given a project with structured, consistent data and clear relationships, you'd recommend relational and explain why. You can explain what a schema constraint is and why it matters.</div>
+              <div class="dtext">Given a project with structured, consistent data and clear relationships, you would recommend relational and explain why. You can explain what a schema constraint is and why it matters. You understand why Airbnb might not use relational for listings.</div>
               <div class="dlabel">Resources</div>
               <div class="tag-row">
-                <span class="tag hl">Applications tab -- Databases page</span>
-                <span class="tag">PostgreSQL docs intro</span>
+                <a class="tag hl" href="databases.html" target="_blank" onclick="event.stopPropagation()">Applications tab -- Databases page</a>
+                <a class="tag" href="https://sqlbolt.com" target="_blank" onclick="event.stopPropagation()">SQLBolt -- JOIN exercises</a>
+                <a class="tag" href="https://www.postgresql.org/docs/current/tutorial.html" target="_blank" onclick="event.stopPropagation()">PostgreSQL docs intro</a>
               </div>
             </div>
           </div>
 
-          <div class="phase-card" onclick="toggleCard(this)">
-            <div class="phase-header">
+          <div class="phase-card">
+            <div class="phase-header" onclick="toggleCard(this.closest('.phase-card'))">
               <div class="phase-icon vec">V</div>
               <div class="phase-name">2. Vector databases</div>
               <div class="phase-est">~3 hrs</div>
@@ -408,22 +418,26 @@ body {
             </div>
             <div class="phase-detail">
               <div class="dlabel">Why second</div>
-              <div class="dtext">Vector databases are increasingly central to modern AI-adjacent systems. Understanding them early -- before Document and Graph -- means you can evaluate architectures that involve semantic search or cross-source querying from the start.</div>
+              <div class="dtext">Vector databases are increasingly central to modern AI-adjacent systems. Understanding them early means you can evaluate architectures that involve semantic search or cross-source querying from the start -- which comes up constantly in AI-era system design.</div>
               <div class="dlabel">What to internalize</div>
-              <div class="dtext">What an embedding is (a mathematical representation of meaning). What similarity search means vs keyword search. Why this category didn't exist before LLMs. The difference between storing data and storing meaning. Common names: Pinecone, Weaviate, Qdrant, Chroma. Also pgvector -- vector search inside PostgreSQL.</div>
+              <div class="dtext">What an embedding is -- a mathematical representation of meaning, not just data. What similarity search means vs keyword search: the difference between "find rows where tag = AI" and "find everything conceptually related to AI." Why this category didn't exist before LLMs. The difference between storing data and storing meaning. Key names: Pinecone, Weaviate, Qdrant, Chroma. Also pgvector -- vector search layered inside PostgreSQL, which matters because it means you don't always need a separate vector database.</div>
+              <div class="dlabel">Deep dive</div>
+              <div class="dtext">Read the Coursera explainer first -- it covers embeddings clearly without assuming ML background. Then try one of the sandboxes. Weaviate has a well-designed onboarding that walks you through storing and querying by similarity without needing to write any embedding code yourself. The goal is to feel what "search by meaning" actually does differently from a SQL WHERE clause.</div>
+              <div class="dlabel">Key question to sit with</div>
+              <div class="dtext">If someone says "we're using a vector database for search" -- what are they actually doing? What would break if they used a relational database with a LIKE query instead? Being able to answer that concretely is the marker for this phase.</div>
               <div class="dlabel">What done looks like</div>
-              <div class="dtext">You can explain why a knowledge base needs a vector layer. You understand the difference between "find rows where tag = AI" and "find everything conceptually related to AI."</div>
+              <div class="dtext">You can explain what an embedding is to someone who hasn't heard the term. You understand why a knowledge base with cross-source querying needs a vector layer and not just tags or keyword search.</div>
               <div class="dlabel">Resources</div>
               <div class="tag-row">
-                <span class="tag hl">Weaviate free tier</span>
-                <span class="tag hl">Qdrant free tier</span>
-                <span class="tag">Coursera -- Vector DB explained</span>
+                <a class="tag hl" href="https://weaviate.io" target="_blank" onclick="event.stopPropagation()">Weaviate sandbox</a>
+                <a class="tag hl" href="https://qdrant.tech" target="_blank" onclick="event.stopPropagation()">Qdrant sandbox</a>
+                <a class="tag" href="https://www.coursera.org/articles/vector-database" target="_blank" onclick="event.stopPropagation()">Coursera -- Vector DB explained</a>
               </div>
             </div>
           </div>
 
-          <div class="phase-card" onclick="toggleCard(this)">
-            <div class="phase-header">
+          <div class="phase-card">
+            <div class="phase-header" onclick="toggleCard(this.closest('.phase-card'))">
               <div class="phase-icon doc">D</div>
               <div class="phase-name">3. Document -- MongoDB</div>
               <div class="phase-est">~3 hrs</div>
@@ -431,21 +445,26 @@ body {
             </div>
             <div class="phase-detail">
               <div class="dlabel">What to internalize</div>
-              <div class="dtext">Collections vs tables. Documents vs rows. Why flexible schema matters -- and when it becomes a problem. Embedding vs referencing. Why MongoDB became the most popular NoSQL database.</div>
+              <div class="dtext">Collections vs tables. Documents vs rows. Why flexible schema matters -- and when it becomes a problem. The key tension: flexibility vs consistency. Embedding vs referencing -- when do you nest data inside a document vs point to another document? Why MongoDB became the most popular NoSQL database and what it sacrifices to get there.</div>
               <div class="dlabel">A good mental model</div>
-              <div class="dtext">Think about content that varies by type -- a PDF has different metadata than a video, which has different metadata than a URL. A relational schema would require many nullable columns to handle this. A document store lets each record carry exactly the fields it needs.</div>
+              <div class="dtext">Think about content that varies by type -- a PDF has different metadata than a video, which has different metadata than a URL. A relational schema would require many nullable columns or complex joins to handle this. A document store lets each record carry exactly the fields it needs, nothing more. This is the core tradeoff: flexibility at the cost of enforced consistency.</div>
+              <div class="dlabel">Deep dive</div>
+              <div class="dtext">Read the Airbnb example in the Applications tab on the Databases page -- it's the clearest real-world illustration of why you'd choose document over relational. Then try MongoDB Atlas free tier: create a collection, insert a few documents with different shapes, and query across them. The moment you insert two documents with different fields into the same collection and it just works -- that's the "aha" for this phase.</div>
+              <div class="dlabel">Watch for</div>
+              <div class="dtext">The flexible schema that feels like a feature early on can become a liability at scale -- when no two documents look the same and you need to query across all of them. Understanding when document stores cause problems is as important as understanding when they solve them.</div>
               <div class="dlabel">What done looks like</div>
-              <div class="dtext">You can explain why a content management system or product catalog would use a document store. You understand the tradeoff between flexibility and consistency.</div>
+              <div class="dtext">You can explain why a content management system or product catalog would use a document store over relational. You understand the tradeoff between flexibility and consistency. You can describe what "embedding vs referencing" means in document database design.</div>
               <div class="dlabel">Resources</div>
               <div class="tag-row">
-                <span class="tag hl">MongoDB Atlas free tier</span>
-                <span class="tag">MongoDB docs intro</span>
+                <a class="tag hl" href="https://www.mongodb.com/atlas" target="_blank" onclick="event.stopPropagation()">MongoDB Atlas free tier</a>
+                <a class="tag hl" href="databases.html" target="_blank" onclick="event.stopPropagation()">Applications tab -- Databases page</a>
+                <a class="tag" href="https://www.mongodb.com/docs/manual/introduction" target="_blank" onclick="event.stopPropagation()">MongoDB docs intro</a>
               </div>
             </div>
           </div>
 
-          <div class="phase-card" onclick="toggleCard(this)">
-            <div class="phase-header">
+          <div class="phase-card">
+            <div class="phase-header" onclick="toggleCard(this.closest('.phase-card'))">
               <div class="phase-icon kv">K</div>
               <div class="phase-name">4. Key-value -- Redis</div>
               <div class="phase-est">~2 hrs</div>
@@ -453,19 +472,24 @@ body {
             </div>
             <div class="phase-detail">
               <div class="dlabel">What to internalize</div>
-              <div class="dtext">The dictionary mental model. Why in-memory is fast. TTLs and expiration. Why Redis is almost always used alongside another database, not instead of one. Common use cases: caching, sessions, rate limiting, queues.</div>
+              <div class="dtext">The dictionary mental model -- every piece of data is stored under a unique key and retrieved by that key. Why in-memory is fast (no disk reads). TTLs and expiration -- why you'd want data to automatically disappear after a set time. Why Redis is almost always used alongside another database, not instead of one. Common use cases: caching (store the result of an expensive query so you don't run it again), sessions, rate limiting, queues.</div>
+              <div class="dlabel">Deep dive</div>
+              <div class="dtext">The Redis online editor lets you run commands in the browser without installing anything. Try SET, GET, EXPIRE, and TTL. Then look at the Twitter/X example in the Applications tab -- it's the clearest illustration of what caching actually solves and why you'd reach for Redis specifically. The key insight: Redis is not a replacement for your main database. It's a fast layer in front of it.</div>
+              <div class="dlabel">Key question to sit with</div>
+              <div class="dtext">If a developer says "we cache that in Redis" -- what does that mean concretely? Where does the real data live? What happens if Redis goes down? Being able to answer those three questions is the marker for this phase.</div>
               <div class="dlabel">What done looks like</div>
-              <div class="dtext">If someone recommends adding Redis to a project, you understand what problem it's solving. You can explain the caching pattern without looking it up.</div>
+              <div class="dtext">If someone recommends adding Redis to a project, you understand what problem it's solving and what it isn't responsible for. You can explain the caching pattern -- source of truth in a relational database, hot data in Redis -- without looking it up.</div>
               <div class="dlabel">Resources</div>
               <div class="tag-row">
-                <span class="tag hl">Redis online editor</span>
-                <span class="tag">Redis docs intro</span>
+                <a class="tag hl" href="https://redis.io/docs/getting-started" target="_blank" onclick="event.stopPropagation()">Redis online editor</a>
+                <a class="tag hl" href="databases.html" target="_blank" onclick="event.stopPropagation()">Applications tab -- Databases page</a>
+                <a class="tag" href="https://redis.io/docs/manual" target="_blank" onclick="event.stopPropagation()">Redis docs</a>
               </div>
             </div>
           </div>
 
-          <div class="phase-card" onclick="toggleCard(this)">
-            <div class="phase-header">
+          <div class="phase-card">
+            <div class="phase-header" onclick="toggleCard(this.closest('.phase-card'))">
               <div class="phase-icon graph">G</div>
               <div class="phase-name">5. Graph -- Neo4j</div>
               <div class="phase-est">~3 hrs</div>
@@ -473,13 +497,18 @@ body {
             </div>
             <div class="phase-detail">
               <div class="dlabel">What to internalize</div>
-              <div class="dtext">Nodes and edges as the primary data model. Traversal vs JOIN -- why this is a fundamentally different operation. When "how things are connected" matters more than "what things contain." Cypher query language at a surface level.</div>
+              <div class="dtext">Nodes (things) and edges (relationships between things) as the primary data model. Traversal vs JOIN -- in a relational database, connecting two things requires a JOIN across tables; in a graph database, relationships are first-class citizens stored directly as edges. This is a fundamentally different operation at a structural level. When "how things are connected" and "through how many steps" matters more than "what things contain." Cypher query language at a surface level -- enough to read a query, not write production code.</div>
+              <div class="dlabel">Deep dive</div>
+              <div class="dtext">Read the LinkedIn example in the Applications tab -- "people you may know" is the canonical graph problem and it makes the case clearly. Then try the Neo4j sandbox: it loads a pre-built movie database and walks you through Cypher queries. The goal is to run a traversal query -- "find all actors who worked with someone who worked with Tom Hanks" -- and feel the difference from a SQL JOIN. That query would require multiple JOINs and subqueries in SQL. In Cypher it's one line.</div>
+              <div class="dlabel">Watch for</div>
+              <div class="dtext">Graph databases are specialized. They are not a replacement for relational -- most systems that use Neo4j also use PostgreSQL for everything that isn't relationship traversal. The question is never "should we use graph instead of relational" -- it's "do we have a relationship traversal problem that justifies adding a graph layer?"</div>
               <div class="dlabel">What done looks like</div>
-              <div class="dtext">You can describe a use case where graph is clearly the right choice and explain why relational would struggle with the same problem.</div>
+              <div class="dtext">You can describe a use case where graph is clearly the right choice and explain in concrete terms why relational would struggle with the same problem. You can read a Cypher query and understand roughly what it's asking.</div>
               <div class="dlabel">Resources</div>
               <div class="tag-row">
-                <span class="tag hl">Neo4j browser sandbox</span>
-                <span class="tag">Neo4j -- graph vs relational</span>
+                <a class="tag hl" href="https://neo4j.com/sandbox" target="_blank" onclick="event.stopPropagation()">Neo4j browser sandbox</a>
+                <a class="tag hl" href="databases.html" target="_blank" onclick="event.stopPropagation()">Applications tab -- Databases page</a>
+                <a class="tag" href="https://neo4j.com/blog/graph-database/graph-database-vs-relational-database" target="_blank" onclick="event.stopPropagation()">Neo4j -- graph vs relational</a>
               </div>
             </div>
           </div>
@@ -490,8 +519,8 @@ body {
       <div class="section">
         <div class="section-title">Outer ring -- decision making</div>
         <div class="phase-grid">
-          <div class="phase-card" onclick="toggleCard(this)">
-            <div class="phase-header">
+          <div class="phase-card">
+            <div class="phase-header" onclick="toggleCard(this.closest('.phase-card'))">
               <div class="phase-icon decision">?</div>
               <div class="phase-name">Evaluating recommendations</div>
               <div class="phase-est">ongoing</div>
