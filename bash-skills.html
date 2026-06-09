@@ -1272,6 +1272,51 @@ $ mv file.md 00\ Human/001\ To\ Be\ Sorted/</code>
       </div>
 
       <div class="section">
+        <div class="section-title">Text Processing</div>
+        <div class="block-grid">
+
+          <div class="block-card">
+            <div class="block-header" onclick="toggleCard(this.closest('.block-card'))">
+              <div><div class="block-symbol">awk</div><div class="block-name">Pattern scanning and text transformation</div></div>
+              <span class="chevron">▾</span>
+            </div>
+            <div class="block-detail">
+              <div class="dlabel">What it is</div>
+              <div class="dtext">A mini programming language for pattern scanning and text transformation. Reads input line by line, splits each line into fields, and applies rules of the form <code>pattern { action }</code></div>
+              <div class="dlabel">Primary use cases</div>
+              <div class="dtext">Extracting columns, filtering rows, computing aggregates (sum/count/average), reformatting output, working with custom delimiters</div>
+              <div class="dlabel">Key built-in variables</div>
+              <table style="font-size:10px;width:100%;border-collapse:collapse;">
+                <tr style="border-bottom:1px solid #ccc;">
+                  <td style="padding:4px;font-weight:bold;">$0</td><td style="padding:4px;">The whole line</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ccc;">
+                  <td style="padding:4px;font-weight:bold;">$1, $2, …</td><td style="padding:4px;">Individual fields</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ccc;">
+                  <td style="padding:4px;font-weight:bold;">NR</td><td style="padding:4px;">Current line number</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ccc;">
+                  <td style="padding:4px;font-weight:bold;">NF</td><td style="padding:4px;">Number of fields on the current line</td>
+                </tr>
+                <tr style="border-bottom:1px solid #ccc;">
+                  <td style="padding:4px;font-weight:bold;">FS</td><td style="padding:4px;">Field separator (default: whitespace)</td>
+                </tr>
+              </table>
+              <div class="dlabel">Examples</div>
+              <code class="dcode">$ awk '{print $1, $3}' file.txt              # extract columns 1 and 3
+$ awk '$3 > 100' file.txt                    # filter rows where column 3 > 100
+$ awk '{sum += $2} END {print sum}' file.txt # sum column 2
+$ awk -F':' '{print $1}' /etc/passwd         # use colon as field separator</code>
+              <div class="dlabel">Tip</div>
+              <div class="dtext">Special patterns: <code>BEGIN {}</code> runs before input, <code>END {}</code> runs after. Use <code>-F</code> to set field separator.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section">
         <div class="section-title">Scripting</div>
         <div class="block-grid">
           <div class="block-card">
