@@ -1,3 +1,7 @@
+> **NOTE (June 2026):** The HTML card templates below are **superseded** — content
+> is now added as entries in `data.js` (see WEBSITE_UPDATE_INSTRUCTIONS.md).
+> This guide remains the reference for visual style, tone, and writing conventions.
+
 # Learning Log Website — Style Guide & Formatting Rules
 
 **Last updated:** June 9, 2026  
