@@ -1102,6 +1102,7 @@ body.homedy {
 .menu-title {
   display: inline-block; padding: 2px 9px; cursor: default; user-select: none;
   font-size: 12px; font-weight: bold; color: #000;
+  touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 .menu.open .menu-title { background: #4a6a8a; color: #fff; }
 .menu-title.apple { font-size: 14px; }
@@ -1186,7 +1187,7 @@ body.homedy {
 
 /* ── MOBILE ── */
 @media (max-width: 640px) {
-  .menubar { padding: 3px 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .menubar { padding: 3px 8px; }   /* no overflow-x: it clips the dropdowns */
   .menu-title { padding: 4px 7px; }
   .desktop { padding: 12px 8px 32px; }
   .desktop-icons { display: none; }            /* trash icon overlapped the window */
@@ -1205,3 +1206,8 @@ body.homedy {
 /* tab intro line (was inline styles) */
 .tab-intro { font-size: 11px; color: #888; margin-bottom: 14px; }
 @media (max-width: 640px) { .tab-intro { font-size: 12px; } }
+
+/* dropdowns near the right edge shouldn't run off-screen on phones */
+@media (max-width: 640px) {
+  .menu:last-of-type .menu-drop, .menu:nth-last-of-type(2) .menu-drop { left: auto; right: 0; }
+}
